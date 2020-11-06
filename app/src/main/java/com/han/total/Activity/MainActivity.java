@@ -19,16 +19,19 @@ import com.han.total.Fragment.fragment_tab0;
 import com.han.total.Fragment.fragment_tab1;
 import com.han.total.Fragment.fragment_tab2;
 import com.han.total.Fragment.fragment_tab3;
-import com.han.total.Interface.DelayCallback;
+import com.han.total.Interface.OneButtonDialogCallback;
+import com.han.total.Interface.TwoButtonDialogCallback;
 import com.han.total.R;
+import com.han.total.Util.CustomDialog;
 import com.han.total.Util.Global;
-import com.han.total.Util.Util;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+
 
 public class MainActivity extends AppCompatActivity implements TemplateAdapter.AdapterCallback{
 
@@ -60,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements TemplateAdapter.A
 
         InitFragement();
         InitRecylerView(); //RecyclerView
+        TestTwoDialog();
     }
 
     public void InitFragement(){
@@ -121,6 +125,33 @@ public class MainActivity extends AppCompatActivity implements TemplateAdapter.A
     @Override
     public void DoSomeThing(int posionion){
         Toast.makeText(mContext,"posion: "+posionion,Toast.LENGTH_SHORT).show();
+    }
+
+    public void TestOneDialog(){
+        CustomDialog customDialog = new CustomDialog(mContext);
+        customDialog.setOneButtonDialogCallback(new OneButtonDialogCallback() {
+            @Override
+            public void onClickConfirm() {
+                Toast.makeText(mContext,"onebutton",Toast.LENGTH_SHORT).show();
+            }
+        });
+        customDialog.show();
+    }
+
+    public void TestTwoDialog(){
+        CustomDialog customDialog = new CustomDialog(mContext);
+        customDialog.setTwoButtonDialogCallback(new TwoButtonDialogCallback() {
+            @Override
+            public void onClickCancel() {
+                Toast.makeText(mContext,"two cancel",Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onClickConfirm() {
+                Toast.makeText(mContext,"two confirim",Toast.LENGTH_SHORT).show();
+            }
+        });
+        customDialog.show();
     }
 
 
