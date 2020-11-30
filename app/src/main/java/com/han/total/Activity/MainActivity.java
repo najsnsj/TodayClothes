@@ -4,36 +4,32 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.Toast;
+
 
 import com.han.total.Adapter.TemplateAdapter;
+
 import com.han.total.Fragment.fragment_tab0;
 import com.han.total.Fragment.fragment_tab1;
 import com.han.total.Fragment.fragment_tab2;
 import com.han.total.Fragment.fragment_tab3;
-import com.han.total.Interface.OneButtonDialogCallback;
-import com.han.total.Interface.TwoButtonDialogCallback;
-import com.han.total.R;
-import com.han.total.Util.CustomDialog;
-import com.han.total.Util.Global;
 
-import java.util.ArrayList;
+import com.han.total.R;
+import com.han.total.Util.Global;
+import com.han.total.Util.Logg;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+//천규
 
 
-
-public class MainActivity extends AppCompatActivity implements TemplateAdapter.AdapterCallback{
+public class MainActivity extends AppCompatActivity {
 
     Context mContext;
     @BindView(R.id.fl_fragment0)
@@ -44,12 +40,13 @@ public class MainActivity extends AppCompatActivity implements TemplateAdapter.A
     FrameLayout fl_fragment2;
     @BindView(R.id.fl_fragment3)
     FrameLayout fl_fragment3;
-    @BindView(R.id.ll_bottom_fragment_total)
-    LinearLayout ll_bottom_fragment_total;
+//    @BindView(R.id.ll_bottom_fragment_total)
+//    LinearLayout ll_bottom_fragment_total;
     @BindView(R.id.fr_fragment)
     FrameLayout fr_fragment;
-    @BindView(R.id.template_recycler)
-    RecyclerView template_recycler;
+    int fposition = 0 ;
+//    @BindView(R.id.template_recycler)
+//    RecyclerView template_recycler;
     //
     TemplateAdapter.AdapterCallback mAdapterCallback;
 
@@ -57,18 +54,16 @@ public class MainActivity extends AppCompatActivity implements TemplateAdapter.A
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //butterknife init
         mContext = this;
         ButterKnife.bind(this);
-
         InitFragement();
-        InitRecylerView(); //RecyclerView
-        TestTwoDialog();
     }
 
+
+    // 프레그먼트 초기값
     public void InitFragement(){
         if(Global.FRAGMENT_NUMBERS==0){
-            ll_bottom_fragment_total.setVisibility(View.GONE);
+            //ll_bottom_fragment_total.setVisibility(View.GONE);
             fr_fragment.setVisibility(View.GONE);
         }else if(Global.FRAGMENT_NUMBERS==1){
             fl_fragment1.setVisibility(View.GONE);
@@ -83,22 +78,35 @@ public class MainActivity extends AppCompatActivity implements TemplateAdapter.A
         if(Global.FRAGMENT_NUMBERS>0) {
             FragmentManager fm = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fm.beginTransaction();
-            fragmentTransaction.add(R.id.fr_fragment, new fragment_tab0());
+            fragmentTransaction.add(R.id.fr_fragment, new fragment_tab0(mContext));
             fragmentTransaction.commit();
         }
     }
 
+    // 클릭 리스너
     @OnClick({R.id.fl_fragment0,R.id.fl_fragment1,R.id.fl_fragment2,R.id.fl_fragment3}) void BottomTabButton(View v){
         int id = v.getId();
-        Fragment fr =  new fragment_tab0();
-        if(id==R.id.fl_fragment0){
-            fr = new fragment_tab0() ;
-        }else if(id==R.id.fl_fragment1){
-            fr = new fragment_tab1() ;
-        }else if(id==R.id.fl_fragment2){
-            fr = new fragment_tab2() ;
-        }else if(id==R.id.fl_fragment3){
-            fr = new fragment_tab3() ;
+        Fragment fr =  new fragment_tab0(mContext);
+        if(id==R.id.fl_fragment0){  //메인화면,. 날씨 있고, 그런 화면들...
+            fr = new fragment_tab0(mContext) ;
+            fposition = 0;
+        }else if(id==R.id.fl_fragment1){  //이메일 띄워주는 기능
+            fposition= 1;
+            //fr = new fragment_tab1(mContext) ;
+            Intent email = new Intent(Intent.ACTION_SEND);
+            email.setType("plain/text");
+            String[] address = {"pa3278@naver.com"};
+            email.putExtra(Intent.EXTRA_EMAIL, address);
+            email.putExtra(Intent.EXTRA_SUBJECT, "test@test");
+            email.putExtra(Intent.EXTRA_TEXT, "내용 미리보기 (미리적을 수 있음)");
+            startActivity(email);
+        }else if(id==R.id.fl_fragment2){  ////가을 봄 여름 선택하는 기능
+            fposition = 2;
+            fr = new fragment_tab2(mContext) ;
+        }else if(id==R.id.fl_fragment3){  //Today outfit view
+            fposition = 3;
+            fr = new fragment_tab3(mContext) ;
+            //fr = new fragment_alarm(mContext) ;
         }
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
@@ -106,52 +114,41 @@ public class MainActivity extends AppCompatActivity implements TemplateAdapter.A
         fragmentTransaction.commit();
     }
 
-    //RecyclerView
-    public void InitRecylerView(){
-
-        template_recycler.setVisibility(View.VISIBLE);
-        fr_fragment.setVisibility(View.GONE);
-
-        ArrayList<String> list = new ArrayList<>();
-        for (int i=0; i<100; i++) {
-            list.add(String.format("TEXT %d", i)) ;
+    // 프래그먼트 바꾸는 기능, 위 클릭 리스너랑 비슷한 기능인지
+    public void FragmentSwitch(int position,Context mContext){
+        Fragment fr =  new fragment_tab0(mContext);
+        if(position==3){
+            fposition =3;
+            Logg.e(Global.USER_HTJ,"positon: "+fposition);
+            fr = new fragment_tab3(mContext) ;
+            fr = new fragment_tab3(mContext) ;
+        }else if(position==1){
+            fposition =1;
+            Logg.e(Global.USER_HTJ,"positon: "+fposition);
+            fr = new fragment_tab1(mContext) ;
         }
-        template_recycler.setLayoutManager(new LinearLayoutManager(this)) ;
-        TemplateAdapter adapter = new TemplateAdapter(list,this) ;
-        template_recycler.setAdapter(adapter) ;
+
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.replace(R.id.fr_fragment, fr);
+        fragmentTransaction.commit();
     }
 
-    //RecyclerView
+
+    // 소프트웨어 백버튼
+    // 메인화면일경우 앱을 종료하고, 그게 아닌 경우 이전 화면으로 이동하기
     @Override
-    public void DoSomeThing(int posionion){
-        Toast.makeText(mContext,"posion: "+posionion,Toast.LENGTH_SHORT).show();
-    }
-
-    public void TestOneDialog(){
-        CustomDialog customDialog = new CustomDialog(mContext);
-        customDialog.setOneButtonDialogCallback(new OneButtonDialogCallback() {
-            @Override
-            public void onClickConfirm() {
-                Toast.makeText(mContext,"onebutton",Toast.LENGTH_SHORT).show();
-            }
-        });
-        customDialog.show();
-    }
-
-    public void TestTwoDialog(){
-        CustomDialog customDialog = new CustomDialog(mContext);
-        customDialog.setTwoButtonDialogCallback(new TwoButtonDialogCallback() {
-            @Override
-            public void onClickCancel() {
-                Toast.makeText(mContext,"two cancel",Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onClickConfirm() {
-                Toast.makeText(mContext,"two confirim",Toast.LENGTH_SHORT).show();
-            }
-        });
-        customDialog.show();
+    public void onBackPressed() {
+        Logg.e(Global.USER_HTJ,"positon: "+fposition);
+        if(fposition==0){
+            finish();
+        }else {
+            Fragment fr = new fragment_tab0(mContext);
+            FragmentManager fm = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fm.beginTransaction();
+            fragmentTransaction.replace(R.id.fr_fragment, fr);
+            fragmentTransaction.commit();
+        }
     }
 
 

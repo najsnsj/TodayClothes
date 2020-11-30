@@ -9,5 +9,5 @@ public class Global
     // Log User Member
     public static final String USER_HTJ = "HTJ";
     // Fragment Numbers
-    public static final int FRAGMENT_NUMBERS = 2;
+    public static final int FRAGMENT_NUMBERS = 4;
 }

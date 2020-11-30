@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+
+// 로컬데이터 저장하는 함수
 class SharedPreferencesData {
 
     private final static String PREF_NAME = "pref_sharedpreferences_data";

@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#6200EE</color>
+    <color name="colorPurple">#9378FF</color>
+    <color name="colorPurple1">#FF9390FF</color>
+
+    <color name="colorLavender">#FBEAFF</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
     <color name="colorGray">#CCCCCC</color>
+    <color name="colorDarkGray">#99879D</color>
+
+    <color name="colorWhite">#ffffff</color>
+    <color name="colorBlack">#000000</color>
+    <color name="colorBlue">#555FFF</color>
+    <color name="colorBlue2">#33A5D6FF</color>
+    <color name="colorBlue3">#A5D6FF</color>
+    <color name="colorYellow">#fff589</color>
+    <color name="colorRed">#FF0600</color>
+
 </resources>
