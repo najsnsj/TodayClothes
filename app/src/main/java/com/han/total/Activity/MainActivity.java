@@ -26,7 +26,7 @@ import com.han.total.Util.Logg;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-//천규11
+//천규
 
 
 public class MainActivity extends AppCompatActivity {
