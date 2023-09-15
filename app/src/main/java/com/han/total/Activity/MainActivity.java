@@ -27,7 +27,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 //천규
-//동혁
+//동혁2
 
 public class MainActivity extends AppCompatActivity {
 
