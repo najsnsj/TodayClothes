@@ -27,6 +27,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 //천규 0920 10:30
+//천규 0920 11:28
 
 
 public class MainActivity extends AppCompatActivity {
