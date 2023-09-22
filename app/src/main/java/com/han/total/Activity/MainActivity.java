@@ -26,7 +26,7 @@ import com.han.total.Util.Logg;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-//천규 0920 10:30 범수 0921
+//천규 0920 10:30 범수 0921 동혁 9.22
 
 
 public class MainActivity extends AppCompatActivity {
