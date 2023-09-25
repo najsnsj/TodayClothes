@@ -1,20 +1,25 @@
 package com.han.total.Activity;
 
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+
 import android.widget.FrameLayout;
+
 
 
 import com.han.total.Adapter.TemplateAdapter;
 
 import com.han.total.Fragment.fragment_tab0;
+
 import com.han.total.Fragment.fragment_tab1;
 import com.han.total.Fragment.fragment_tab2;
 import com.han.total.Fragment.fragment_tab3;
@@ -22,6 +27,7 @@ import com.han.total.Fragment.fragment_tab3;
 import com.han.total.R;
 import com.han.total.Util.Global;
 import com.han.total.Util.Logg;
+import com.han.total.Fragment.donghyuktest;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,12 +38,18 @@ import butterknife.OnClick;
 public class MainActivity extends AppCompatActivity {
 
     Context mContext;
+
+
     @BindView(R.id.fl_fragment0)
     FrameLayout fl_fragment0;
     @BindView(R.id.fl_fragment1)
     FrameLayout fl_fragment1;
     @BindView(R.id.fl_fragment2)
     FrameLayout fl_fragment2;
+
+    @BindView(R.id.fl_fragment0529)
+    FrameLayout fl_fragment0529;
+
     @BindView(R.id.fl_fragment3)
     FrameLayout fl_fragment3;
 //    @BindView(R.id.ll_bottom_fragment_total)
@@ -50,6 +62,9 @@ public class MainActivity extends AppCompatActivity {
     //
     TemplateAdapter.AdapterCallback mAdapterCallback;
 
+
+
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +72,16 @@ public class MainActivity extends AppCompatActivity {
         mContext = this;
         ButterKnife.bind(this);
         InitFragement();
+
+        fl_fragment0529.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view){
+                Intent intent=new Intent(getApplicationContext(), donghyuktest.class);
+                startActivity(intent);
+            }
+        });//추가-최동혁
+
+
+
     }
 
 
@@ -69,9 +94,11 @@ public class MainActivity extends AppCompatActivity {
             fl_fragment1.setVisibility(View.GONE);
             fl_fragment2.setVisibility(View.GONE);
             fl_fragment3.setVisibility(View.GONE);
+
         }else if(Global.FRAGMENT_NUMBERS==2){
             fl_fragment2.setVisibility(View.GONE);
             fl_fragment3.setVisibility(View.GONE);
+
         }else if(Global.FRAGMENT_NUMBERS==3){
             fl_fragment3.setVisibility(View.GONE);
         }
