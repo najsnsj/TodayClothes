@@ -33,6 +33,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 //천규 0920 10:30 범수 0921 동혁 9.22
+//천규 0922 1711
 
 
 public class MainActivity extends AppCompatActivity {
