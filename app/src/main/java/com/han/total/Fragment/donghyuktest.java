@@ -34,10 +34,16 @@ public class donghyuktest extends AppCompatActivity {
     public EditText contextEditText;
 
     public ImageView imageView;
+    public ImageView imageView2;
+    public ImageView imageView3;
 
     public Button gallery_Btn;
+    public Button gallery_Btn2;
+    public Button gallery_Btn3;
 
     private static final int REQUEST_IMAGE_PICK = 1000;
+    private static final int REQUEST_IMAGE_PICK_2 = 2000;
+    private static final int REQUEST_IMAGE_PICK_3 = 3000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +55,15 @@ public class donghyuktest extends AppCompatActivity {
         del_Btn = findViewById(R.id.del_Btn);
         cha_Btn = findViewById(R.id.cha_Btn);
         textView2 = findViewById(R.id.textView2);
-        textView3 = findViewById(R.id.textView3);
+        //textView3 = findViewById(R.id.textView3);
         contextEditText = findViewById(R.id.contextEditText);
 
         imageView = findViewById(R.id.imageView);
+        imageView2 = findViewById(R.id.imageView2);
+        imageView3 = findViewById(R.id.imageView3);
         gallery_Btn = findViewById(R.id.gallery_Btn);
+        gallery_Btn2 = findViewById(R.id.gallery_Btn2);
+        gallery_Btn3 = findViewById(R.id.gallery_Btn3);
 
         gallery_Btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,6 +71,24 @@ public class donghyuktest extends AppCompatActivity {
                 Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
                 startActivityForResult(intent, REQUEST_IMAGE_PICK);
+            }
+        });
+
+        gallery_Btn2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+                startActivityForResult(intent, REQUEST_IMAGE_PICK_2);
+            }
+        });
+
+        gallery_Btn3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+                startActivityForResult(intent, REQUEST_IMAGE_PICK_3);
             }
         });
 
@@ -77,7 +105,11 @@ public class donghyuktest extends AppCompatActivity {
                 diaryTextView.setVisibility(View.VISIBLE);
                 save_Btn.setVisibility(View.VISIBLE);
                 gallery_Btn.setVisibility(View.VISIBLE);
+                gallery_Btn2.setVisibility(View.VISIBLE);
+                gallery_Btn3.setVisibility(View.VISIBLE);
                 imageView.setVisibility(View.INVISIBLE);
+                imageView2.setVisibility(View.INVISIBLE);
+                imageView3.setVisibility(View.INVISIBLE);
                 contextEditText.setVisibility(View.VISIBLE);
                 textView2.setVisibility(View.INVISIBLE);
                 cha_Btn.setVisibility(View.INVISIBLE);
@@ -99,7 +131,11 @@ public class donghyuktest extends AppCompatActivity {
                 cha_Btn.setVisibility(View.VISIBLE);
                 del_Btn.setVisibility(View.VISIBLE);
                 gallery_Btn.setVisibility(View.INVISIBLE);
+                gallery_Btn2.setVisibility(View.INVISIBLE);
+                gallery_Btn3.setVisibility(View.INVISIBLE);
                 imageView.setVisibility(View.VISIBLE);
+                imageView2.setVisibility(View.VISIBLE);
+                imageView3.setVisibility(View.VISIBLE);
                 contextEditText.setVisibility(View.INVISIBLE);
                 textView2.setVisibility(View.VISIBLE);
 
@@ -133,7 +169,11 @@ public class donghyuktest extends AppCompatActivity {
             cha_Btn.setVisibility(View.VISIBLE);
             del_Btn.setVisibility(View.VISIBLE);
             gallery_Btn.setVisibility(View.INVISIBLE);
+            gallery_Btn2.setVisibility(View.INVISIBLE);
+            gallery_Btn3.setVisibility(View.INVISIBLE);
             imageView.setVisibility(View.VISIBLE);
+            imageView2.setVisibility(View.VISIBLE);
+            imageView3.setVisibility(View.VISIBLE);
 
             Bitmap loadedImage = loadImage();
             if (loadedImage != null) {
@@ -151,7 +191,11 @@ public class donghyuktest extends AppCompatActivity {
                     textView2.setVisibility(View.INVISIBLE);
                     contextEditText.setText(str);
                     gallery_Btn.setVisibility(View.VISIBLE);
+                    gallery_Btn2.setVisibility(View.VISIBLE);
+                    gallery_Btn3.setVisibility(View.VISIBLE);
                     imageView.setVisibility(View.INVISIBLE);
+                    imageView2.setVisibility(View.INVISIBLE);
+                    imageView3.setVisibility(View.INVISIBLE);
                     save_Btn.setVisibility(View.VISIBLE);
                     cha_Btn.setVisibility(View.INVISIBLE);
                     del_Btn.setVisibility(View.INVISIBLE);
@@ -169,7 +213,11 @@ public class donghyuktest extends AppCompatActivity {
                     contextEditText.setVisibility(View.VISIBLE);
                     save_Btn.setVisibility(View.VISIBLE);
                     gallery_Btn.setVisibility(View.VISIBLE);
+                    gallery_Btn2.setVisibility(View.VISIBLE);
+                    gallery_Btn3.setVisibility(View.VISIBLE);
                     imageView.setVisibility(View.INVISIBLE);
+                    imageView2.setVisibility(View.INVISIBLE);
+                    imageView3.setVisibility(View.INVISIBLE);
                     cha_Btn.setVisibility(View.INVISIBLE);
                     del_Btn.setVisibility(View.INVISIBLE);
                     removeDiary(readDay);
@@ -183,7 +231,11 @@ public class donghyuktest extends AppCompatActivity {
                 cha_Btn.setVisibility(View.INVISIBLE);
                 del_Btn.setVisibility(View.INVISIBLE);
                 imageView.setVisibility(View.INVISIBLE);
+                imageView2.setVisibility(View.INVISIBLE);
+                imageView3.setVisibility(View.INVISIBLE);
                 gallery_Btn.setVisibility(View.VISIBLE);
+                gallery_Btn2.setVisibility(View.VISIBLE);
+                gallery_Btn3.setVisibility(View.VISIBLE);
                 contextEditText.setVisibility(View.VISIBLE);
             }
 
@@ -204,6 +256,24 @@ public class donghyuktest extends AppCompatActivity {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                 imageView.setImageBitmap(bitmap);
 
+                saveImage(bitmap); // 이미지 저장 메소드 호출.
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else if (requestCode == REQUEST_IMAGE_PICK_2 && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            Uri uri = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                imageView2.setImageBitmap(bitmap);
+                saveImage(bitmap); // 이미지 저장 메소드 호출.
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else if (requestCode == REQUEST_IMAGE_PICK_3 && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            Uri uri = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                imageView3.setImageBitmap(bitmap);
                 saveImage(bitmap); // 이미지 저장 메소드 호출.
             } catch (IOException e) {
                 e.printStackTrace();
@@ -278,15 +348,4 @@ public class donghyuktest extends AppCompatActivity {
         }
 
     }
-
-
-
-
-
-
-
-
-
-
-
 }
