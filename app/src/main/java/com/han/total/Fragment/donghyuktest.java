@@ -1,13 +1,17 @@
 package com.han.total.Fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
@@ -18,28 +22,35 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.han.total.Activity.MainActivity;
+import com.han.total.Activity.SelectClothsActivity;
 import com.han.total.R;
+import com.han.total.data;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+import butterknife.OnClick;
 
 public class donghyuktest extends AppCompatActivity {
 
+    private Context mContext;
     public String readDay = null;
-    public String str = null;
+    public String date = null;
+
     public CalendarView calendarView;
     public Button cha_Btn, del_Btn, save_Btn;
     public TextView diaryTextView, textView2, textView3;
     public EditText contextEditText;
-
-    public ImageView imageView;
+    Bitmap bitmap;
+    public ImageView imageView1;
     public ImageView imageView2;
     public ImageView imageView3;
-
-    public Button gallery_Btn;
-    public Button gallery_Btn2;
-    public Button gallery_Btn3;
 
     private static final int REQUEST_IMAGE_PICK = 1000;
     private static final int REQUEST_IMAGE_PICK_2 = 2000;
@@ -51,102 +62,125 @@ public class donghyuktest extends AppCompatActivity {
         setContentView(R.layout.activity_donghyuktest);
         calendarView = findViewById(R.id.calendarView);
         diaryTextView = findViewById(R.id.diaryTextView);
-        save_Btn = findViewById(R.id.save_Btn);
-        del_Btn = findViewById(R.id.del_Btn);
-        cha_Btn = findViewById(R.id.cha_Btn);
-        textView2 = findViewById(R.id.textView2);
-        //textView3 = findViewById(R.id.textView3);
         contextEditText = findViewById(R.id.contextEditText);
-
-        imageView = findViewById(R.id.imageView);
+        imageView1 = findViewById(R.id.imageView1);
         imageView2 = findViewById(R.id.imageView2);
         imageView3 = findViewById(R.id.imageView3);
-        gallery_Btn = findViewById(R.id.gallery_Btn);
-        gallery_Btn2 = findViewById(R.id.gallery_Btn2);
-        gallery_Btn3 = findViewById(R.id.gallery_Btn3);
+        save_Btn = findViewById(R.id.save_Btn);
+        cha_Btn = findViewById(R.id.cha_Btn);
+        date = getCurrentDate();
+        diaryTextView.setText(date);
+        contextEditText.setFocusable(false);
+        contextEditText.setText(data.getInstance(mContext).getDay(date));
+        loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/", data.getInstance(mContext).getCALC(date, "아우터"), imageView1);
+        loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/", data.getInstance(mContext).getCALC(date, "상의"), imageView2);
+        loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/", data.getInstance(mContext).getCALC(date, "하의"), imageView3);
+        /*Intent intent = getIntent();
+        String image =  intent.getStringExtra("image");
+        int num = intent.getIntExtra("num");*/
+        // contextEditText.setText(image);
 
-        gallery_Btn.setOnClickListener(new View.OnClickListener() {
+        imageView1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-                startActivityForResult(intent, REQUEST_IMAGE_PICK);
+                Intent intent = new Intent(donghyuktest.this, SelectClothsActivity.class);
+                intent.putExtra("weather","봄");
+                intent.putExtra("type","아우터");
+                intent.putExtra("condition","캘린더");
+                intent.putExtra("date",date);
+                startActivity(intent);
+                finish();
+                /*intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+                startActivityForResult(intent, REQUEST_IMAGE_PICK);*/
             }
         });
 
-        gallery_Btn2.setOnClickListener(new View.OnClickListener() {
+        imageView2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-                startActivityForResult(intent, REQUEST_IMAGE_PICK_2);
+                Intent intent = new Intent(donghyuktest.this, SelectClothsActivity.class);
+                intent.putExtra("weather","봄");
+                intent.putExtra("type","상의");
+                intent.putExtra("condition","캘린더");
+                intent.putExtra("date",date);
+                startActivity(intent);
+                finish();
             }
         });
 
-        gallery_Btn3.setOnClickListener(new View.OnClickListener() {
+        imageView3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-                startActivityForResult(intent, REQUEST_IMAGE_PICK_3);
+                Intent intent = new Intent(donghyuktest.this, SelectClothsActivity.class);
+                intent.putExtra("weather","봄");
+                intent.putExtra("type","하의");
+                intent.putExtra("condition","캘린더");
+                intent.putExtra("date",date);
+                startActivity(intent);
+                finish();
             }
         });
-
-
-
-
-
-
-        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener()
-        {
+        imageView1.setClickable(false);
+        imageView2.setClickable(false);
+        imageView3.setClickable(false);
+        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
-            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth)
-            {
+            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+                imageView1.setImageResource(0);
+                imageView1.setClickable(false);
+                imageView2.setImageResource(0);
+                imageView2.setClickable(false);
+                imageView3.setImageResource(0);
+                imageView3.setClickable(false);
+                contextEditText.setFocusable(false);
+                date = String.format("%d / %d / %d", year, month + 1, dayOfMonth);
                 diaryTextView.setVisibility(View.VISIBLE);
-                save_Btn.setVisibility(View.VISIBLE);
-                gallery_Btn.setVisibility(View.VISIBLE);
-                gallery_Btn2.setVisibility(View.VISIBLE);
-                gallery_Btn3.setVisibility(View.VISIBLE);
-                imageView.setVisibility(View.INVISIBLE);
-                imageView2.setVisibility(View.INVISIBLE);
-                imageView3.setVisibility(View.INVISIBLE);
-                contextEditText.setVisibility(View.VISIBLE);
-                textView2.setVisibility(View.INVISIBLE);
-                cha_Btn.setVisibility(View.INVISIBLE);
-                del_Btn.setVisibility(View.INVISIBLE);
-                diaryTextView.setText(String.format("%d / %d / %d", year, month + 1, dayOfMonth));
-                contextEditText.setText("");
-                checkDay(year, month, dayOfMonth);
+                loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/",data.getInstance(mContext).getCALC(date,"아우터"),imageView1);
+                loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/",data.getInstance(mContext).getCALC(date,"상의"),imageView2);
+                loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/",data.getInstance(mContext).getCALC(date,"하의"),imageView3);
+                //imageView3.setVisibility(View.INVISIBLE);
+                //contextEditText.setVisibility(View.VISIBLE);
+                diaryTextView.setText(date);
+                contextEditText.setText(data.getInstance(mContext).getDay(date));
+                //checkDay(year, month, dayOfMonth);
             }
         });
-        save_Btn.setOnClickListener(new View.OnClickListener()
-        {
+
+        save_Btn.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View view)
-            {
-                saveDiary(readDay);
-                str = contextEditText.getText().toString();
-                textView2.setText(str);
-                save_Btn.setVisibility(View.INVISIBLE);
-                cha_Btn.setVisibility(View.VISIBLE);
-                del_Btn.setVisibility(View.VISIBLE);
-                gallery_Btn.setVisibility(View.INVISIBLE);
-                gallery_Btn2.setVisibility(View.INVISIBLE);
-                gallery_Btn3.setVisibility(View.INVISIBLE);
-                imageView.setVisibility(View.VISIBLE);
-                imageView2.setVisibility(View.VISIBLE);
-                imageView3.setVisibility(View.VISIBLE);
-                contextEditText.setVisibility(View.INVISIBLE);
-                textView2.setVisibility(View.VISIBLE);
+            public void onClick(View v){
+                data.getInstance(mContext).setDay(date,contextEditText.getText().toString());
+                contextEditText.setFocusable(false);
+                imageView1.setClickable(false);
+                imageView2.setClickable(false);
+                imageView3.setClickable(false);
+            }
+        });
 
-                Bitmap bitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
-                saveImage(bitmap);
-
+        cha_Btn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                contextEditText.setFocusable(true);
+                contextEditText.setFocusableInTouchMode(true);
+                contextEditText.setClickable(true);
+                imageView1.setClickable(true);
+                imageView2.setClickable(true);
+                imageView3.setClickable(true);
             }
         });
     }
 
-    public void checkDay(int cYear, int cMonth, int cDay)
+    public String getCurrentDate() {
+        // 현재 시간을 가져오는 Calendar 객체 생성
+        Calendar calendar = Calendar.getInstance();
+
+        // 현재 날짜를 yyyy-MM-dd 형식의 문자열로 포맷
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy / MM / d");
+        String currentDate = dateFormat.format(calendar.getTime());
+
+        return currentDate;
+    }
+    /*public void checkDay(int cYear, int cMonth, int cDay)
     {
         readDay = "" + cYear + "-" + (cMonth + 1) + "" + "-" + cDay + ".txt";
         FileInputStream fis;
@@ -171,7 +205,7 @@ public class donghyuktest extends AppCompatActivity {
             gallery_Btn.setVisibility(View.INVISIBLE);
             gallery_Btn2.setVisibility(View.INVISIBLE);
             gallery_Btn3.setVisibility(View.INVISIBLE);
-            imageView.setVisibility(View.VISIBLE);
+            imageView1.setVisibility(View.VISIBLE);
             imageView2.setVisibility(View.VISIBLE);
             imageView3.setVisibility(View.VISIBLE);
 
@@ -244,41 +278,40 @@ public class donghyuktest extends AppCompatActivity {
         {
             e.printStackTrace();
         }
-    }
+    }*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+            if (requestCode == REQUEST_IMAGE_PICK && resultCode == RESULT_OK && data != null && data.getData() != null) {
+                Uri uri = data.getData();
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                    imageView1.setImageBitmap(bitmap);
+                    saveImage(bitmap); // 이미지 저장 메소드 호출.
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else if (requestCode == REQUEST_IMAGE_PICK_2 && resultCode == RESULT_OK && data != null && data.getData() != null) {
+                Uri uri = data.getData();
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                    imageView2.setImageBitmap(bitmap);
+                    saveImage(bitmap); // 이미지 저장 메소드 호출.
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else if (requestCode == REQUEST_IMAGE_PICK_3 && resultCode == RESULT_OK && data != null && data.getData() != null) {
+                Uri uri = data.getData();
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                    imageView3.setImageBitmap(bitmap);
+                    saveImage(bitmap); // 이미지 저장 메소드 호출.
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
 
-        if (requestCode == REQUEST_IMAGE_PICK && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            Uri uri = data.getData();
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                imageView.setImageBitmap(bitmap);
-
-                saveImage(bitmap); // 이미지 저장 메소드 호출.
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else if (requestCode == REQUEST_IMAGE_PICK_2 && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            Uri uri = data.getData();
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                imageView2.setImageBitmap(bitmap);
-                saveImage(bitmap); // 이미지 저장 메소드 호출.
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else if (requestCode == REQUEST_IMAGE_PICK_3 && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            Uri uri = data.getData();
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                imageView3.setImageBitmap(bitmap);
-                saveImage(bitmap); // 이미지 저장 메소드 호출.
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     private void saveImage(Bitmap bitmap){
@@ -309,9 +342,21 @@ public class donghyuktest extends AppCompatActivity {
         return null;
     }
 
-
-
-
+    private void loadImageFromStorage(String path, String name,ImageView iv) {
+        try {
+            File f;
+            f = new File(path, name);
+            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+            if(iv.equals(imageView1)){
+                imageView1.setImageBitmap(b);
+            }else if(iv.equals(imageView2)) {
+                imageView2.setImageBitmap(b);
+            }else imageView3.setImageBitmap(b);
+        } catch (FileNotFoundException e) {
+            Log.e("HAN", "exception: " + e);
+            e.printStackTrace();
+        }
+    }
 
     @SuppressLint("WrongConstant")
     public void removeDiary(String readDay)

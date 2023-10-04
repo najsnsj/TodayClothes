@@ -1,8 +1,10 @@
 package com.han.total.Fragment;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -19,6 +21,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +36,7 @@ import com.han.total.data;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
@@ -39,22 +44,27 @@ import static android.app.Activity.RESULT_OK;
 
 public class fragment_tab1 extends Fragment{
 
-
-
     private Context mContext;
     private static final int CAMEARA_REQUEST_CODE = 101;
+    private static final int GALLERY_REQUEST_CODE = 102;
     @BindView(R.id.ll_weather)
     LinearLayout ll_weather;
     @BindView(R.id.ll_type)
     LinearLayout ll_type;
-
+    @BindView(R.id.ll_style)
+    LinearLayout ll_style;
     @BindView(R.id.tv_title_type)
     TextView tv_title_type;
     @BindView(R.id.tv_title_weather)
     TextView tv_title_weather;
+    @BindView(R.id.tv_title_style)
+    TextView tv_title_style;
+    @BindView(R.id.iv_camera)
+    ImageView iv_camera;
+
 
     Bitmap bitmap;
-    String weather="봄",type="아우터";
+    String weather="봄",type="아우터",style="스포츠";
 
     public fragment_tab1(Context context) {
         mContext = context;
@@ -81,31 +91,39 @@ public class fragment_tab1 extends Fragment{
     }
 
     // 카메라 띄우는 함수
-    @OnClick(R.id.iv_camera) void ClickCamera(){
-        Camera();
+    @OnClick(R.id.camera_btn) void ClickCamera(){Camera();}
+    @OnClick(R.id.gallery_btn) void ClickGallery(){Gallery();}
+
+    void Gallery(){
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, 102);
     }
-    // 카메라 띄우는 함수
+
     void Camera(){
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, 101);
     }
 
     //클릭리스너 ,
-    @OnClick({R.id.ll_click_type,R.id.ll_click_weather,R.id.ll_winter0}) void Click(View v){
+    @OnClick({R.id.ll_click_type,R.id.ll_click_weather,R.id.ll_winter0,R.id.ll_click_style}) void Click(View v){
         if(v.getId()==R.id.ll_click_type){
             Clear();
             ll_type.setVisibility(View.VISIBLE);
-        }else if(v.getId()==R.id.ll_click_weather){
+        }else if(v.getId()==R.id.ll_click_weather) {
             Clear();
             ll_weather.setVisibility(View.VISIBLE);
+        }else if(v.getId()==R.id.ll_click_style){
+            Clear();
+            ll_style.setVisibility(View.VISIBLE);
         }else if(v.getId()==R.id.ll_winter0){
             Toast.makeText(mContext,"사진이 저장되었습니다.",Toast.LENGTH_SHORT).show();
-            Save(type,weather);
+            Save(type,weather,style);
         }
     }
 
     // 아우터, 상의 , 하의 리스트
-    @OnClick({R.id.tv_outer,R.id.tv_top,R.id.tv_bottom,R.id.tv_spring,R.id.tv_summer,R.id.tv_winter}) void Click1(View v){
+    @OnClick({R.id.tv_outer,R.id.tv_top,R.id.tv_bottom,R.id.tv_spring,R.id.tv_summer,R.id.tv_winter,R.id.tv_classic,R.id.tv_sport,R.id.tv_casual}) void Click1(View v){
         if(v.getId()==R.id.tv_outer){
             Clear();
             tv_title_type.setText("아우터");
@@ -130,12 +148,25 @@ public class fragment_tab1 extends Fragment{
             Clear();
             weather="겨울";
             tv_title_weather.setText("겨울");
+        }else if(v.getId()==R.id.tv_sport){
+            Clear();
+            style="스포츠";
+            tv_title_style.setText("스포츠");
+        }else if(v.getId()==R.id.tv_casual){
+            Clear();
+            style="캐주얼";
+            tv_title_style.setText("캐주얼");
+        }else if(v.getId()==R.id.tv_classic){
+            Clear();
+            style="클래식";
+            tv_title_style.setText("클래식");
         }
     }
 
     void Clear(){
         ll_type.setVisibility(View.GONE);
         ll_weather.setVisibility(View.GONE);
+        ll_style.setVisibility(View.GONE);
     }
 
     @Override
@@ -147,25 +178,72 @@ public class fragment_tab1 extends Fragment{
             case CAMEARA_REQUEST_CODE:
                 if (resultCode == RESULT_OK && data.hasExtra("data")) {
                     bitmap = (Bitmap) data.getExtras().get("data");
+                    iv_camera.setImageBitmap(bitmap);
                     if (bitmap != null) {
                         //iv_0.setImageBitmap(bitmap);
                     }
 
                 }
                 break;
+            case GALLERY_REQUEST_CODE:
+                if (resultCode == RESULT_OK && data != null) {
+                    Uri imageUri = data.getData();
+                    if (imageUri != null) {
+                        try {
+                            bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageUri);
+                            iv_camera.setImageBitmap(bitmap);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                break;
+
         }
     }
 
-    void Save(String type, String weather){
+    void Save(String type, String weather, String style) {
         String path="";
         String name="";
         Logg.e(Global.USER_HTJ,"저장 타입: "+type);
         Logg.e(Global.USER_HTJ,"저장 날씨: "+weather);
+        Logg.e(Global.USER_HTJ,"저장 스타일: "+style);
+        Logg.e(Global.USER_HTJ,"data.getInstance(mContext).setNumber(2,type+weather);: "+data.getInstance(mContext).getNumber(type+weather));
+
+        if(data.getInstance(mContext).getNumC(type+weather)==9) {
+            data.getInstance(mContext).setNumC(0, type + weather);
+        }
+        if(data.getInstance(mContext).getNumber(type+weather)!=9){
+            data.getInstance(mContext).setNumber(data.getInstance(mContext).getNumber(type + weather) + 1, type + weather);
+        }
+        data.getInstance(mContext).setNumC(data.getInstance(mContext).getNumC(type + weather) + 1, type + weather);
+        data.getInstance(mContext).setStyle(style, type + weather, data.getInstance(mContext).getNumC(type + weather));
+        name = type + weather + data.getInstance(mContext).getNumC(type + weather) + ".jpg";
+        data.getInstance(mContext).setPicture(name, type + weather, data.getInstance(mContext).getNumC(type + weather));
+        path = createPictureFilePath(name);
+        Logg.e(Global.USER_HTJ, "저장 name: " + data.getInstance(mContext).getNumC(type + weather));
+        Logg.e(Global.USER_HTJ, "저장 name: " + name);
+        Logg.e(Global.USER_HTJ, "저장 path: " + path);
+
+
+        Logg.e(Global.USER_HTJ,"path:"+path);
+        saveBitmapAsFile(bitmap,path);
+        scanMediaFile(new File(path));
+    }
+
+
+    /*void Save(String type, String weather, String style){
+        String path="";
+        String name="";
+        Logg.e(Global.USER_HTJ,"저장 타입: "+type);
+        Logg.e(Global.USER_HTJ,"저장 날씨: "+weather);
+        Logg.e(Global.USER_HTJ,"저장 스타일: "+style);
         Logg.e(Global.USER_HTJ,"data.getInstance(mContext).setNumber(2,type+weather);: "+data.getInstance(mContext).getNumber(type+weather));
 
 
         if(data.getInstance(mContext).getNumber(type+weather)==0){
             data.getInstance(mContext).setNumber(1,type+weather);
+            data.getInstance(mContext).setStyle(style,type+weather,1);
             name = type+weather+"1.jpg";
             data.getInstance(mContext).setPicture(name,type+weather,1);
             path = createPictureFilePath(name);
@@ -175,6 +253,7 @@ public class fragment_tab1 extends Fragment{
 
         }else if(data.getInstance(mContext).getNumber(type+weather)==1){
             data.getInstance(mContext).setNumber(2,type+weather);
+            data.getInstance(mContext).setStyle(style,type+weather,2);
             name = type+weather+"2.jpg";
             data.getInstance(mContext).setPicture(name,type+weather,2);
             Logg.e(Global.USER_HTJ,"data.getInstance(mContext).setPicture(name,type+weather,2): "+data.getInstance(mContext).getPicture(type+weather,2));
@@ -198,12 +277,14 @@ public class fragment_tab1 extends Fragment{
             data.getInstance(mContext).setNumber(data.getInstance(mContext).getNumber(type+weather)+1,type+weather);
             if(data.getInstance(mContext).getNumber(type+weather)%2==0){
                 name = type+weather+"1.jpg";
+                data.getInstance(mContext).setStyle(style,type+weather,1);
                 data.getInstance(mContext).setPicture(name,type+weather,1);
                 path = createPictureFilePath(name);
                 Logg.e("저장 name: "+name);
                 Logg.e("저장 path: "+path);
             }else{
                 name = type+weather+"2.jpg";
+                data.getInstance(mContext).setStyle(style,type+weather,2);
                 data.getInstance(mContext).setPicture(name,type+weather,2);
                 path = createPictureFilePath(name);
                 Logg.e("저장 name: "+name);
@@ -222,7 +303,7 @@ public class fragment_tab1 extends Fragment{
         Logg.e(Global.USER_HTJ,"path:"+path);
         saveBitmapAsFile(bitmap,path);
         scanMediaFile(new File(path));
-    }
+    }*/
 
     // 카메라로 찍은 함수를 특정 위치로 저장하는 함수
     private void saveBitmapAsFile(Bitmap bitmap, String filepath) {

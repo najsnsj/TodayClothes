@@ -99,6 +99,7 @@ public class fragment_tab2 extends Fragment {
                     intent.putExtra("type","상의");
                 }
             }
+            intent.putExtra("condition","NONE");
             startActivity(intent);
     }
 

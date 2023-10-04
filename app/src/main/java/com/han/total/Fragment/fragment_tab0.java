@@ -7,16 +7,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -34,7 +31,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -43,12 +39,12 @@ import android.widget.Toast;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 import com.han.total.Activity.MainActivity;
+//import com.han.total.Adapter.Activity.MainActivity;
 import com.han.total.Adapter.TemplateAdapter;
 import com.han.total.R;
 import com.han.total.Service.GpsTracker;
 import com.han.total.Util.Global;
 import com.han.total.Util.Logg;
-import com.han.total.dialog.CustomDialog;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -58,7 +54,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -78,7 +73,6 @@ public class fragment_tab0 extends Fragment  implements TemplateAdapter.AdapterC
     TextView tv_time;
     @BindView(R.id.tv_address)
     TextView tv_address;
-
     @BindView(R.id.template_recycler)
     RecyclerView template_recycler;
     static boolean first=false;
@@ -100,9 +94,12 @@ public class fragment_tab0 extends Fragment  implements TemplateAdapter.AdapterC
     @BindView(R.id.tv_temperature2)  TextView tv_temperature2;
     @BindView(R.id.tv_temperature3)  TextView tv_temperature3;
 
+    @BindView(R.id.ll_styles)   LinearLayout ll_styles;
+    @BindView(R.id.tv_title_style2) TextView tv_title_style2;
+    boolean isStylesVisible = false;
+    String style;
 
     int temp=20;
-
     private GpsTracker gpsTracker;
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
     private static final int CAMEARA_REQUEST_CODE = 101;
@@ -120,6 +117,50 @@ public class fragment_tab0 extends Fragment  implements TemplateAdapter.AdapterC
         // Required empty public constructor
     }
 
+    @OnClick({R.id.ll_select_style}) void Click(View v){
+        if(v.getId()==R.id.ll_select_style) {
+            if (isStylesVisible) {
+                ll_styles.setVisibility(View.GONE); // 레이아웃을 숨김
+            } else {
+                ll_styles.setVisibility(View.VISIBLE); // 레이아웃을 표시
+            }
+            isStylesVisible = !isStylesVisible;
+        }
+    }
+
+    @OnClick({R.id.tv_sport2,R.id.tv_casual2,R.id.tv_classic2}) void Click1(View v){
+        if(v.getId()==R.id.tv_sport2){
+            tv_title_style2.setText("스포츠");
+            style="스포츠";
+            ll_styles.setVisibility(View.GONE);
+            isStylesVisible = !isStylesVisible;
+            InitRecylerView2(style);
+        }else if(v.getId()==R.id.tv_casual2){
+            tv_title_style2.setText("캐주얼");
+            style="캐주얼";
+            ll_styles.setVisibility(View.GONE);
+            isStylesVisible = !isStylesVisible;
+        }else if(v.getId()==R.id.tv_classic2){
+            tv_title_style2.setText("클래식");
+            style="클래식";
+            ll_styles.setVisibility(View.GONE);
+            isStylesVisible = !isStylesVisible;
+        }
+    }
+
+    public void InitRecylerView2(String style){
+
+        template_recycler.setVisibility(View.VISIBLE);
+        //template_recycler.setVisibility(View.GONE);
+
+        ArrayList<String> list = new ArrayList<>();
+        for (int i=0; i<3; i++) {
+            list.add(Integer.toString(temp)) ;
+        }
+        template_recycler.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false)) ;
+        TemplateAdapter adapter = new TemplateAdapter(list,this,mContext) ;
+        template_recycler.setAdapter(adapter) ;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -174,7 +215,7 @@ public class fragment_tab0 extends Fragment  implements TemplateAdapter.AdapterC
     public void DoSomeThing(int posionion){
         // 리스트에서 클릭 리스너
         ((MainActivity)getActivity()).FragmentSwitch(3,mContext);
-       //Toast.makeText(mContext,"posion: "+posionion,Toast.LENGTH_SHORT).show();
+        //Toast.makeText(mContext,"posion: "+posionion,Toast.LENGTH_SHORT).show();
     }
 
 
@@ -188,10 +229,11 @@ public class fragment_tab0 extends Fragment  implements TemplateAdapter.AdapterC
         for (int i=0; i<3; i++) {
             list.add(Integer.toString(temp)) ;
         }
-        template_recycler.setLayoutManager(new LinearLayoutManager(mContext, LinearLayout.HORIZONTAL, false)) ;
+        template_recycler.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false)) ;
         TemplateAdapter adapter = new TemplateAdapter(list,this,mContext) ;
         template_recycler.setAdapter(adapter) ;
     }
+
 
     // 자동 분류, 수동 분류 다이얼로그
     @OnClick({R.id.tv_add}) void Add(){
@@ -474,7 +516,7 @@ public class fragment_tab0 extends Fragment  implements TemplateAdapter.AdapterC
             this.isStart = stage;
         }
         protected Long doInBackground(URL... urls) {
-             GetData(isStart);
+            GetData(isStart);
 
             return null;
         }
@@ -514,7 +556,7 @@ public class fragment_tab0 extends Fragment  implements TemplateAdapter.AdapterC
         //getUltraSrtFcst
         //String total_url = "http://apis.data.go.kr/1360000/VilageFcstInfoService/getVilageFcst?serviceKey=";
         String total_url = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtFcst?serviceKey=";
-       // String url1 = "&pageNo=1&numOfRows=10&dataType=JSON&base_date=";
+        // String url1 = "&pageNo=1&numOfRows=10&dataType=JSON&base_date=";
         String url1 = "&pageNo="+Integer.toString(1)+"&numOfRows=100&dataType=JSON&base_date=";
 
         String date;
@@ -613,11 +655,11 @@ public class fragment_tab0 extends Fragment  implements TemplateAdapter.AdapterC
 
             Logg.e(Global.USER_HTJ,"stage: "+stage);
 
-                Check++;
-                Message msg = Message.obtain();
-                msg.what = APP_NORMAL_START_MSG;
-                msg.arg1 = stage+1;
-                sendDataMessage(msg);
+            Check++;
+            Message msg = Message.obtain();
+            msg.what = APP_NORMAL_START_MSG;
+            msg.arg1 = stage+1;
+            sendDataMessage(msg);
 
 
             //tv_main_temperture.setText((int)(average/4)+"º");
@@ -648,7 +690,7 @@ public class fragment_tab0 extends Fragment  implements TemplateAdapter.AdapterC
                         if (arr[0]!=null){
                             int temp1 = Integer.parseInt(arr[0])+Integer.parseInt(arr[1])+Integer.parseInt(arr[2])+Integer.parseInt(arr[3]);
                             temp = (int)(temp1/4);
-                            }
+                        }
                         //int temp1 = 40;
                         //temp = (int)(temp1/4);
                         if (true) {
@@ -837,7 +879,7 @@ public class fragment_tab0 extends Fragment  implements TemplateAdapter.AdapterC
                     }
                     p1hindex++;
                 }
-             }
+            }
         }
         catch (Exception e){
             Logg.e(Global.USER_HTJ," exception"+ e);

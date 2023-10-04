@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
 
     Context mContext;
 
-
     @BindView(R.id.fl_fragment0)
     FrameLayout fl_fragment0;
     @BindView(R.id.fl_fragment1)
@@ -80,8 +79,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });//추가-최동혁
-
-
 
     }
 

@@ -1,6 +1,10 @@
 package com.han.total.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -13,9 +17,11 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.han.total.Fragment.donghyuktest;
 import com.han.total.R;
 import com.han.total.Util.Global;
 import com.han.total.Util.Logg;
@@ -32,7 +38,10 @@ public class SelectClothsActivity extends AppCompatActivity {
     TextView tv_weather;
     @BindView(R.id.tv_type)
     TextView tv_type;
-
+    String weather = null;
+    String date = null;
+    int n = 0;
+    String type = null;
     @BindView(R.id.iv_1) ImageView iv_1;
     @BindView(R.id.iv_2) ImageView iv_2;
     @BindView(R.id.iv_3) ImageView iv_3;
@@ -51,14 +60,81 @@ public class SelectClothsActivity extends AppCompatActivity {
 
         // 인텐트 파라미터 받는 과정
         Intent intent = getIntent();
-        String weather =  intent.getStringExtra("weather");
-        String type =  intent.getStringExtra("type");
-
+        weather =  intent.getStringExtra("weather");
+        type =  intent.getStringExtra("type");
+        date = intent.getStringExtra("date");
+        String con = intent.getStringExtra("condition");
+        //String style = intent.getStringExtra("style");
         tv_weather.setText(weather);
         tv_type.setText(type);
-        Init(type,weather);
+        if(con.equals("캘린더")){
+            Initcon(type,weather);
+            iv_1.setClickable(true); iv_2.setClickable(true); iv_3.setClickable(true);
+            iv_4.setClickable(true); iv_5.setClickable(true); iv_6.setClickable(true);
+            iv_7.setClickable(true); iv_8.setClickable(true); iv_9.setClickable(true);
+            tv_weather.setClickable(true);
+        }else {
+            iv_1.setClickable(false); iv_2.setClickable(false); iv_3.setClickable(false);
+            iv_4.setClickable(false); iv_5.setClickable(false); iv_6.setClickable(false);
+            iv_7.setClickable(false); iv_8.setClickable(false); iv_9.setClickable(false);
+            tv_weather.setClickable(false);
+            Init(type, weather);
+        }
+
     }
 
+    @OnClick({R.id.tv_weather}) void ClickW(){
+        if(weather.equals("봄")){
+            weather = "여름";
+            tv_weather.setText(weather);
+            Initcon(type,weather);
+        }else if(weather.equals("여름")){
+            weather = "겨울";
+            tv_weather.setText(weather);
+            Initcon(type,weather);
+        }else{
+            weather = "봄";
+            tv_weather.setText(weather);
+            Initcon(type,weather);
+        }
+    }
+    @OnClick({R.id.iv_1,R.id.iv_2,R.id.iv_3,R.id.iv_4,R.id.iv_5,R.id.iv_6,R.id.iv_7,R.id.iv_8,R.id.iv_9}) void Click2(View view){
+        switch(view.getId()){
+            case R.id.iv_1:
+                n=1;
+                break;
+            case R.id.iv_2:
+                n=2;
+                break;
+            case R.id.iv_3:
+                n=3;
+                break;
+            case R.id.iv_4:
+                n=4;
+                break;
+            case R.id.iv_5:
+                n=5;
+                break;
+            case R.id.iv_6:
+                n=6;
+                break;
+            case R.id.iv_7:
+                n=7;
+                break;
+            case R.id.iv_8:
+                n=8;
+                break;
+            case R.id.iv_9:
+                n=9;
+                break;
+        }
+        Intent intent = new Intent(SelectClothsActivity.this, donghyuktest.class);
+        data.getInstance(mContext).setCalC(date,type,type+weather+n+".jpg");
+        //intent.putExtra("image",type+weather+n+".jpg");
+        //intent.putExtra("type",type);
+        startActivity(intent);
+        finish();
+    }
     // 이메일 띄우기
     @OnClick({R.id.fl_fragment1}) void Click(){
         Intent email = new Intent(Intent.ACTION_SEND);
@@ -70,94 +146,212 @@ public class SelectClothsActivity extends AppCompatActivity {
         startActivity(email);
     }
 
-    void Init(String type , String weather){
-        if(weather.equals("봄")){
-            if(type.equals("아우터")){
-                iv_1.setImageResource(R.drawable.springouter1);
-                iv_2.setImageResource(R.drawable.springouter2);
-                iv_3.setImageResource(R.drawable.springouter3);
-                iv_4.setImageResource(R.drawable.springouter4);
-                iv_5.setImageResource(R.drawable.springouter5);
-                iv_6.setImageResource(R.drawable.springouter6);
-                iv_7.setImageResource(R.drawable.springouter7);
-            }else if(type.equals("상의")){
-                iv_1.setImageResource(R.drawable.springtop1);
-                iv_2.setImageResource(R.drawable.springtop2);
-                iv_3.setImageResource(R.drawable.springtop3);
-                iv_4.setImageResource(R.drawable.springtop4);
-                iv_5.setImageResource(R.drawable.springtop5);
-                iv_6.setImageResource(R.drawable.springtop6);
-                iv_7.setImageResource(R.drawable.springtop7);
-            }else if(type.equals("하의")){
-                iv_1.setImageResource(R.drawable.springbottom1);
-                iv_2.setImageResource(R.drawable.springbottom2);
-                iv_3.setImageResource(R.drawable.springbottom3);
-                iv_4.setImageResource(R.drawable.springbottom4);
-                iv_5.setImageResource(R.drawable.springbottom5);
-                iv_6.setImageResource(R.drawable.springbottom6);
-                iv_7.setImageResource(R.drawable.springbottom7);
+    void Init(String type, String weather) {
+        if (weather.equals("봄")) {
+            if (type.equals("아우터")) {
+                iv_1.setImageResource(0);
+                iv_2.setImageResource(0);
+                iv_3.setImageResource(0);
+                iv_4.setImageResource(0);
+                iv_5.setImageResource(0);
+                iv_6.setImageResource(0);
+                iv_7.setImageResource(0);
+                iv_8.setImageResource(0);
+                iv_9.setImageResource(0);
+                for (int i = 1; i <= data.getInstance(mContext).getNumber(type + weather); i++) {
+                    String name = data.getInstance(mContext).getPicture(type + weather, i);
+                    loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/", name, i);
+                }
+            } else if (type.equals("상의")) {
+                iv_1.setImageResource(0);
+                iv_2.setImageResource(0);
+                iv_3.setImageResource(0);
+                iv_4.setImageResource(0);
+                iv_5.setImageResource(0);
+                iv_6.setImageResource(0);
+                iv_7.setImageResource(0);
+                iv_8.setImageResource(0);
+                iv_9.setImageResource(0);
+                for (int i = 1; i <= data.getInstance(mContext).getNumber(type + weather); i++) {
+                    String name = data.getInstance(mContext).getPicture(type + weather, i);
+                    loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/", name, i);
+                }
+            } else if (type.equals("하의")) {
+                iv_1.setImageResource(0);
+                iv_2.setImageResource(0);
+                iv_3.setImageResource(0);
+                iv_4.setImageResource(0);
+                iv_5.setImageResource(0);
+                iv_6.setImageResource(0);
+                iv_7.setImageResource(0);
+                iv_8.setImageResource(0);
+                iv_9.setImageResource(0);
+                for (int i = 1; i <= data.getInstance(mContext).getNumber(type + weather); i++) {
+                    String name = data.getInstance(mContext).getPicture(type + weather, i);
+                    loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/", name, i);
+                }
             }
-        }else if(weather.equals("여름")){
-            if(type.equals("아우터")){
-                iv_1.setImageResource(R.drawable.summerouter1);
-                iv_2.setImageResource(R.drawable.summerouter2);
-                iv_3.setImageResource(R.drawable.summerouter3);
-                iv_4.setImageResource(R.drawable.summerouter4);
-                iv_5.setImageResource(R.drawable.summerouter5);
-                iv_6.setImageResource(R.drawable.summerouter6);
-                iv_7.setImageResource(R.drawable.summerouter7);
-            }else if(type.equals("상의")){
-                iv_1.setImageResource(R.drawable.summertop1);
-                iv_2.setImageResource(R.drawable.summertop2);
-                iv_3.setImageResource(R.drawable.summertop3);
-                iv_4.setImageResource(R.drawable.summertop4);
-                iv_5.setImageResource(R.drawable.summertop5);
-                iv_6.setImageResource(R.drawable.summertop6);
-                iv_7.setImageResource(R.drawable.summertop7);
-
-            }else if(type.equals("하의")){
-                iv_1.setImageResource(R.drawable.summerbottom1);
-                iv_2.setImageResource(R.drawable.summerbottom2);
-                iv_3.setImageResource(R.drawable.summerbottom3);
-                iv_4.setImageResource(R.drawable.summerbottom4);
-                iv_5.setImageResource(R.drawable.summerbottom5);
-                iv_6.setImageResource(R.drawable.summerbottom6);
-                iv_7.setImageResource(R.drawable.summerbottom7);
+        } else if (weather.equals("여름")) {
+            if (type.equals("아우터")) {
+                iv_1.setImageResource(0);
+                iv_2.setImageResource(0);
+                iv_3.setImageResource(0);
+                iv_4.setImageResource(0);
+                iv_5.setImageResource(0);
+                iv_6.setImageResource(0);
+                iv_7.setImageResource(0);
+                iv_8.setImageResource(0);
+                iv_9.setImageResource(0);
+                for (int i = 1; i <= data.getInstance(mContext).getNumber(type + weather); i++) {
+                    String name = data.getInstance(mContext).getPicture(type + weather, i);
+                    loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/", name, i);
+                }
+            } else if (type.equals("상의")) {
+                iv_1.setImageResource(0);
+                iv_2.setImageResource(0);
+                iv_3.setImageResource(0);
+                iv_4.setImageResource(0);
+                iv_5.setImageResource(0);
+                iv_6.setImageResource(0);
+                iv_7.setImageResource(0);
+                iv_8.setImageResource(0);
+                iv_9.setImageResource(0);
+                for (int i = 1; i <= data.getInstance(mContext).getNumber(type + weather); i++) {
+                    String name = data.getInstance(mContext).getPicture(type + weather, i);
+                    loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/", name, i);
+                }
+            } else if (type.equals("하의")) {
+                iv_1.setImageResource(0);
+                iv_2.setImageResource(0);
+                iv_3.setImageResource(0);
+                iv_4.setImageResource(0);
+                iv_5.setImageResource(0);
+                iv_6.setImageResource(0);
+                iv_7.setImageResource(0);
+                iv_8.setImageResource(0);
+                iv_9.setImageResource(0);
+                for (int i = 1; i <= data.getInstance(mContext).getNumber(type + weather); i++) {
+                    String name = data.getInstance(mContext).getPicture(type + weather, i);
+                    loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/", name, i);
+                }
             }
-        }else if(weather.equals("겨울")){
-            if(type.equals("아우터")){
-                iv_1.setImageResource(R.drawable.winterouter1);
-                iv_2.setImageResource(R.drawable.winterouter2);
-                iv_3.setImageResource(R.drawable.winterouter3);
-                iv_4.setImageResource(R.drawable.winterouter4);
-                iv_5.setImageResource(R.drawable.winterouter5);
-                iv_6.setImageResource(R.drawable.winterouter6);
-                iv_7.setImageResource(R.drawable.winterouter7);
-                Logg.e(Global.USER_HTJ,"아우터 겨울: "+data.getInstance(mContext).getNumber(type+weather));
-            }else if(type.equals("상의")){
-                iv_1.setImageResource(R.drawable.wintertop1);
-                iv_2.setImageResource(R.drawable.wintertop2);
-                iv_3.setImageResource(R.drawable.wintertop3);
-                iv_4.setImageResource(R.drawable.wintertop4);
-                iv_5.setImageResource(R.drawable.wintertop5);
-                iv_6.setImageResource(R.drawable.wintertop6);
-                iv_7.setImageResource(R.drawable.wintertop7);
-            }else if(type.equals("하의")){
-                iv_1.setImageResource(R.drawable.winterbottom1);
-                iv_2.setImageResource(R.drawable.winterbottom2);
-                iv_3.setImageResource(R.drawable.winterbottom3);
-                iv_4.setImageResource(R.drawable.winterbottom4);
-                iv_5.setImageResource(R.drawable.winterbottom5);
-                iv_6.setImageResource(R.drawable.winterbottom6);
-                iv_7.setImageResource(R.drawable.winterbottom7);
+        } else if (weather.equals("겨울")) {
+            if (type.equals("아우터")) {
+                iv_1.setImageResource(0);
+                iv_2.setImageResource(0);
+                iv_3.setImageResource(0);
+                iv_4.setImageResource(0);
+                iv_5.setImageResource(0);
+                iv_6.setImageResource(0);
+                iv_7.setImageResource(0);
+                iv_8.setImageResource(0);
+                iv_9.setImageResource(0);
+                for (int i = 1; i <= data.getInstance(mContext).getNumber(type + weather); i++) {
+                    String name = data.getInstance(mContext).getPicture(type + weather, i);
+                    loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/", name, i);
+                }
+            } else if (type.equals("상의")) {
+                iv_1.setImageResource(0);
+                iv_2.setImageResource(0);
+                iv_3.setImageResource(0);
+                iv_4.setImageResource(0);
+                iv_5.setImageResource(0);
+                iv_6.setImageResource(0);
+                iv_7.setImageResource(0);
+                iv_8.setImageResource(0);
+                iv_9.setImageResource(0);
+                for (int i = 1; i <= data.getInstance(mContext).getNumber(type + weather); i++) {
+                    String name = data.getInstance(mContext).getPicture(type + weather, i);
+                    loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/", name, i);
+                }
+            } else if (type.equals("하의")) {
+                iv_1.setImageResource(0);
+                iv_2.setImageResource(0);
+                iv_3.setImageResource(0);
+                iv_4.setImageResource(0);
+                iv_5.setImageResource(0);
+                iv_6.setImageResource(0);
+                iv_7.setImageResource(0);
+                iv_8.setImageResource(0);
+                iv_9.setImageResource(0);
+                for (int i = 1; i <= data.getInstance(mContext).getNumber(type + weather); i++) {
+                    String name = data.getInstance(mContext).getPicture(type + weather, i);
+                    loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/", name, i);
+                }
             }
         }
+        Logg.e(Global.USER_HTJ, "타입: " + type);
+        Logg.e(Global.USER_HTJ, "날씨: " + weather);
+        Logg.e(Global.USER_HTJ, "개수: " + data.getInstance(mContext).getNumber(type + weather));
+    }
+        void Initcon(String type , String weather){
+            if(weather.equals("봄")){
+                if(type.equals("아우터")){
+                    iv_1.setImageResource(0);iv_2.setImageResource(0);iv_3.setImageResource(0);iv_4.setImageResource(0);iv_5.setImageResource(0);iv_6.setImageResource(0);iv_7.setImageResource(0);iv_8.setImageResource(0);iv_9.setImageResource(0);
+                    for(int i=1;i<=data.getInstance(mContext).getNumber(type+weather);i++){
+                        String name = data.getInstance(mContext).getPicture(type+weather,i);
+                        loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/",name,i);
+                    }
+                }else if(type.equals("상의")){
+                    iv_1.setImageResource(0);iv_2.setImageResource(0);iv_3.setImageResource(0);iv_4.setImageResource(0);iv_5.setImageResource(0);iv_6.setImageResource(0);iv_7.setImageResource(0);iv_8.setImageResource(0);iv_9.setImageResource(0);
+                    for(int i=1;i<=data.getInstance(mContext).getNumber(type+weather);i++){
+                        String name = data.getInstance(mContext).getPicture(type+weather,i);
+                        loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/",name,i);
+                    }
+                }else if(type.equals("하의")){
+                    iv_1.setImageResource(0);iv_2.setImageResource(0);iv_3.setImageResource(0);iv_4.setImageResource(0);iv_5.setImageResource(0);iv_6.setImageResource(0);iv_7.setImageResource(0);iv_8.setImageResource(0);iv_9.setImageResource(0);
+                    for(int i=1;i<=data.getInstance(mContext).getNumber(type+weather);i++){
+                        String name = data.getInstance(mContext).getPicture(type+weather,i);
+                        loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/",name,i);
+                    }
+                }
+            }else if(weather.equals("여름")){
+                if(type.equals("아우터")){
+                    iv_1.setImageResource(0);iv_2.setImageResource(0);iv_3.setImageResource(0);iv_4.setImageResource(0);iv_5.setImageResource(0);iv_6.setImageResource(0);iv_7.setImageResource(0);iv_8.setImageResource(0);iv_9.setImageResource(0);
+                    for(int i=1;i<=data.getInstance(mContext).getNumber(type+weather);i++){
+                        String name = data.getInstance(mContext).getPicture(type+weather,i);
+                        loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/",name,i);
+                    }
+                }else if(type.equals("상의")){
+                    iv_1.setImageResource(0);iv_2.setImageResource(0);iv_3.setImageResource(0);iv_4.setImageResource(0);iv_5.setImageResource(0);iv_6.setImageResource(0);iv_7.setImageResource(0);iv_8.setImageResource(0);iv_9.setImageResource(0);
+                    for(int i=1;i<=data.getInstance(mContext).getNumber(type+weather);i++){
+                        String name = data.getInstance(mContext).getPicture(type+weather,i);
+                        loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/",name,i);
+                    }
+                }else if(type.equals("하의")){
+                    iv_1.setImageResource(0);iv_2.setImageResource(0);iv_3.setImageResource(0);iv_4.setImageResource(0);iv_5.setImageResource(0);iv_6.setImageResource(0);iv_7.setImageResource(0);iv_8.setImageResource(0);iv_9.setImageResource(0);
+                    for(int i=1;i<=data.getInstance(mContext).getNumber(type+weather);i++){
+                        String name = data.getInstance(mContext).getPicture(type+weather,i);
+                        loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/",name,i);
+                    }
+                }
+            }else if(weather.equals("겨울")){
+                if(type.equals("아우터")){
+                    iv_1.setImageResource(0);iv_2.setImageResource(0);iv_3.setImageResource(0);iv_4.setImageResource(0);iv_5.setImageResource(0);iv_6.setImageResource(0);iv_7.setImageResource(0);iv_8.setImageResource(0);iv_9.setImageResource(0);
+                    for(int i=1;i<=data.getInstance(mContext).getNumber(type+weather);i++){
+                        String name = data.getInstance(mContext).getPicture(type+weather,i);
+                        loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/",name,i);
+                    }
+                }else if(type.equals("상의")){
+                    iv_1.setImageResource(0);iv_2.setImageResource(0);iv_3.setImageResource(0);iv_4.setImageResource(0);iv_5.setImageResource(0);iv_6.setImageResource(0);iv_7.setImageResource(0);iv_8.setImageResource(0);iv_9.setImageResource(0);
+                    for(int i=1;i<=data.getInstance(mContext).getNumber(type+weather);i++){
+                        String name = data.getInstance(mContext).getPicture(type+weather,i);
+                        loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/",name,i);
+                    }
+                }else if(type.equals("하의")){
+                    iv_1.setImageResource(0);iv_2.setImageResource(0);iv_3.setImageResource(0);iv_4.setImageResource(0);iv_5.setImageResource(0);iv_6.setImageResource(0);iv_7.setImageResource(0);iv_8.setImageResource(0);iv_9.setImageResource(0);
+                    for(int i=1;i<=data.getInstance(mContext).getNumber(type+weather);i++){
+                        String name = data.getInstance(mContext).getPicture(type+weather,i);
+                        loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/",name,i);
+                    }
+                }
+            }
 
         Logg.e(Global.USER_HTJ,"타입: "+type);
         Logg.e(Global.USER_HTJ,"날씨: "+weather);
         Logg.e(Global.USER_HTJ,"개수: "+data.getInstance(mContext).getNumber(type+weather));
 
-        if(data.getInstance(mContext).getNumber(type+weather)==0){
+       /* if(data.getInstance(mContext).getNumber(type+weather)==0){
             iv_8.setVisibility(View.GONE);
             iv_9.setVisibility(View.GONE);
         }else if(data.getInstance(mContext).getNumber(type+weather)==1){
@@ -167,15 +361,54 @@ public class SelectClothsActivity extends AppCompatActivity {
         }else{
             String name = data.getInstance(mContext).getPicture(type+weather,1);
             Logg.e(Global.USER_HTJ,"아우터 겨울1: "+name);
+            String name2 = data.getInstance(mContext).getStyle(type+weather,1);
+            tv_weather.setText(name2);
             loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/",name,true);
             name = data.getInstance(mContext).getPicture(type+weather,2);
             Logg.e(Global.USER_HTJ,"아우터 겨울2: "+name);
             loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/",name,false);
+        }*/
+    }
+    private void loadImageFromStorage(String path, String name,int i) {
+        try {
+            File f;
+            f = new File(path, name);
+            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+            switch (i) {
+                case 1:
+                    iv_1.setImageBitmap(b);
+                    break;
+                case 2:
+                    iv_2.setImageBitmap(b);
+                    break;
+                case 3:
+                    iv_3.setImageBitmap(b);
+                    break;
+                case 4:
+                    iv_4.setImageBitmap(b);
+                    break;
+                case 5:
+                    iv_5.setImageBitmap(b);
+                    break;
+                case 6:
+                    iv_6.setImageBitmap(b);
+                    break;
+                case 7:
+                    iv_7.setImageBitmap(b);
+                    break;
+                case 8:
+                    iv_8.setImageBitmap(b);
+                    break;
+                case 9:
+                    iv_9.setImageBitmap(b);
+                    break;
+            }
+        } catch (FileNotFoundException e) {
+            Log.e("HAN", "exception: " + e);
+            e.printStackTrace();
         }
     }
-
-
-    private void loadImageFromStorage(String path, String name,boolean flag)
+    /*private void loadImageFromStorage(String path, String name,boolean flag)
     {
         try {
             File f;
@@ -193,7 +426,5 @@ public class SelectClothsActivity extends AppCompatActivity {
             Log.e("HAN","exception: "+e);
             e.printStackTrace();
         }
-    }
-
-
+    }*/
 }

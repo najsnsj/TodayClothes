@@ -14,7 +14,7 @@
     <ImageView
         android:id="@+id/iv_camera"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="70dp"
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:background="@drawable/iconbackground"
@@ -22,9 +22,41 @@
 
     <LinearLayout
         android:layout_gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="30dp">
+    <TextView
+        android:id="@+id/camera_btn"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:text="카메라"
+        android:background="@drawable/confirm_btn_round"
+        android:textColor="@color/colorWhite"/>
+
+    <TextView
+        android:id="@+id/gallery_btn"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:text="갤러리"
+        android:background="@drawable/confirm_btn_round"
+        android:textColor="@color/colorWhite"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_gravity="center_horizontal"
         android:background="@drawable/confirm_btn_round"
         android:id="@+id/ll_click_weather"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
@@ -111,7 +143,7 @@
         android:layout_gravity="center_horizontal"
         android:background="@drawable/confirm_btn_round"
         android:id="@+id/ll_click_type"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
@@ -187,51 +219,91 @@
             android:layout_height="wrap_content"
             android:textSize="20dp"
             android:text="하의"
-           android:textColor="@color/colorWhite"/>
+            android:textColor="@color/colorWhite"/>
 
     </LinearLayout>
 
     <LinearLayout
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/confirm_btn_round"
+        android:id="@+id/ll_click_style"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_height="50dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_title_style"
+            android:layout_gravity="center_vertical"
+            android:gravity="right|center_vertical"
+            android:layout_weight="1"
+            android:textStyle="bold"
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text="스타일"
+            android:textColor="@color/colorWhite"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:layout_marginRight="10dp"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text="▽"
+            android:textColor="@color/colorWhite"/>
+    </LinearLayout>
+
+    <LinearLayout
         android:visibility="gone"
-        android:id="@+id/ll_summer1"
+        android:id="@+id/ll_style"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="15dp"
-        android:layout_width="250dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:orientation="vertical"
         android:background="@drawable/confirm_btn_round">
 
         <TextView
-            android:id="@+id/tv_outer_summer"
+            android:id="@+id/tv_sport"
             android:layout_marginTop="8dp"
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="20dp"
-            android:text="아우터"
+            android:text="스포츠"
             android:textColor="@color/colorWhite"/>
 
         <TextView
-            android:id="@+id/tv_top_summer"
+            android:id="@+id/tv_casual"
             android:layout_marginTop="8dp"
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="20dp"
-            android:text="상의"
+            android:text="캐주얼"
             android:textColor="@color/colorWhite"/>
 
         <TextView
-            android:id="@+id/tv_bottom_summer"
+            android:id="@+id/tv_classic"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="20dp"
-            android:text="하의"
+            android:text="클래식"
             android:textColor="@color/colorWhite"/>
-
     </LinearLayout>
 
     <LinearLayout
@@ -273,4 +345,4 @@
             android:textColor="@color/colorWhite"/>
     </LinearLayout>
 
-   </LinearLayout>
+</LinearLayout>

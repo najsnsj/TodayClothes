@@ -288,6 +288,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ll_today"
         android:layout_marginTop="10dp"
         android:orientation="horizontal"
         android:layout_width="wrap_content"
@@ -322,6 +323,94 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/ll_select_style"
+        android:orientation="horizontal"
+        android:layout_marginBottom="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/confirm_btn_round"
+        app:layout_constraintBottom_toTopOf="@+id/template_recycler"
+        tools:ignore="MissingConstraints">
+        <TextView
+            android:id="@+id/tv_title_style2"
+            android:layout_gravity="center_vertical"
+            android:gravity="right|center_vertical"
+            android:textStyle="bold"
+            android:layout_marginLeft="10dp"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:text="스타일"
+            android:textColor="@color/colorWhite"/>
+
+        <View
+            android:layout_width="8dp"
+            android:layout_height="33dp"/>
+
+        <TextView
+            android:layout_marginRight="10dp"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15dp"
+            android:text="▽"
+            android:textColor="@color/colorWhite"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/ll_styles"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/confirm_btn_round"
+        android:layout_marginLeft="10dp"
+        app:layout_constraintStart_toEndOf="@+id/ll_select_style"
+        app:layout_constraintBottom_toBottomOf="@+id/ll_select_style"
+        tools:ignore="MissingConstraints">
+
+        <TextView
+            android:id="@+id/tv_sport2"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12dp"
+            android:textStyle="bold"
+            android:text="스포츠"
+            android:textColor="@color/colorWhite"/>
+
+        <TextView
+            android:id="@+id/tv_casual2"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12dp"
+            android:text="캐주얼"
+            android:textStyle="bold"
+            android:textColor="@color/colorWhite"/>
+
+        <TextView
+            android:id="@+id/tv_classic2"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12dp"
+            android:text="클래식"
+            android:textStyle="bold"
+            android:textColor="@color/colorWhite"/>
+    </LinearLayout>
 
     <LinearLayout
         android:visibility="gone"
