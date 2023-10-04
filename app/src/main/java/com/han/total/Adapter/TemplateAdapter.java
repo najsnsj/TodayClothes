@@ -215,13 +215,17 @@ public class TemplateAdapter extends RecyclerView.Adapter<TemplateAdapter.ViewHo
 
 
     int Random(int i){
-        int max_num_value = i;
-        int min_num_value = 1;
+        if (i == 0) {
+            return 0;
+        }else {
+            int max_num_value = i;
+            int min_num_value = 1;
 
-        Random random = new Random();
+            Random random = new Random();
 
-        int randomNum = random.nextInt(max_num_value - min_num_value + 1) + min_num_value;
-        return randomNum;
+            int randomNum = random.nextInt(max_num_value - min_num_value + 1) + min_num_value;
+            return randomNum;
+        }
     }
 
     @Override
