@@ -30,6 +30,8 @@ import com.han.total.data;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class SelectClothsActivity extends AppCompatActivity {
 
@@ -130,11 +132,13 @@ public class SelectClothsActivity extends AppCompatActivity {
         }
         Intent intent = new Intent(SelectClothsActivity.this, donghyuktest.class);
         data.getInstance(mContext).setCalC(date,type,type+weather+n+".jpg");
-        //intent.putExtra("image",type+weather+n+".jpg");
+        intent.putExtra("date",getCurrentDate());
         //intent.putExtra("type",type);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();
     }
+
     // 이메일 띄우기
     @OnClick({R.id.fl_fragment1}) void Click(){
         Intent email = new Intent(Intent.ACTION_SEND);
@@ -369,6 +373,18 @@ public class SelectClothsActivity extends AppCompatActivity {
             loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/",name,false);
         }*/
     }
+
+    public String getCurrentDate() {
+        // 현재 시간을 가져오는 Calendar 객체 생성
+        Calendar calendar = Calendar.getInstance();
+
+        // 현재 날짜를 yyyy-MM-dd 형식의 문자열로 포맷
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy / MM / d");
+        String currentDate = dateFormat.format(calendar.getTime());
+
+        return currentDate;
+    }
+
     private void loadImageFromStorage(String path, String name,int i) {
         try {
             File f;

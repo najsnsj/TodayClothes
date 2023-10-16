@@ -79,7 +79,6 @@ public class fragment_tab0 extends Fragment  implements TemplateAdapter.AdapterC
 
     @BindView(R.id.tv_main_temperture)  TextView tv_main_temperture;
     @BindView(R.id.iv_main_weather) ImageView iv_main_weather;
-
     @BindView(R.id.tv_time0)  TextView tv_time0;
     @BindView(R.id.tv_time1)  TextView tv_time1;
     @BindView(R.id.tv_time2)  TextView tv_time2;
@@ -96,6 +95,10 @@ public class fragment_tab0 extends Fragment  implements TemplateAdapter.AdapterC
 
     @BindView(R.id.ll_styles)   LinearLayout ll_styles;
     @BindView(R.id.tv_title_style2) TextView tv_title_style2;
+    @BindView(R.id.tv_sport2) TextView tv_sports;
+    @BindView(R.id.tv_classic2) TextView tv_classic;
+    @BindView(R.id.tv_casual2) TextView tv_casual;
+
     boolean isStylesVisible = false;
     String style;
 
@@ -130,36 +133,81 @@ public class fragment_tab0 extends Fragment  implements TemplateAdapter.AdapterC
 
     @OnClick({R.id.tv_sport2,R.id.tv_casual2,R.id.tv_classic2}) void Click1(View v){
         if(v.getId()==R.id.tv_sport2){
-            tv_title_style2.setText("스포츠");
-            style="스포츠";
-            ll_styles.setVisibility(View.GONE);
-            isStylesVisible = !isStylesVisible;
-            InitRecylerView2(style);
+            if(tv_sports.getText().equals("스포츠")&&tv_title_style2.getText().equals("스타일")) {
+                tv_title_style2.setText("스포츠");
+                style = "스포츠";
+                ll_styles.setVisibility(View.GONE);
+                isStylesVisible = !isStylesVisible;
+                InitRecylerView("스포츠");
+                tv_sports.setText("스타일");
+            }else if(tv_sports.getText().equals("스타일")&&tv_title_style2.getText().equals("스포츠")){
+                tv_title_style2.setText("스타일");
+                style="스타일";
+                ll_styles.setVisibility(View.GONE);
+                isStylesVisible = !isStylesVisible;
+                InitRecylerView("스타일");
+                tv_sports.setText("스포츠");
+            }else{
+                tv_sports.setText("스타일");
+                tv_title_style2.setText("스포츠");
+                style="스포츠";
+                ll_styles.setVisibility(View.GONE);
+                isStylesVisible = !isStylesVisible;
+                InitRecylerView("스포츠");
+                tv_casual.setText("캐주얼");
+                tv_classic.setText("클래식");
+            }
         }else if(v.getId()==R.id.tv_casual2){
-            tv_title_style2.setText("캐주얼");
-            style="캐주얼";
-            ll_styles.setVisibility(View.GONE);
-            isStylesVisible = !isStylesVisible;
+            if(tv_casual.getText().equals("캐주얼")&&tv_title_style2.getText().equals("스타일")) {
+                tv_title_style2.setText("캐주얼");
+                style = "캐주얼";
+                ll_styles.setVisibility(View.GONE);
+                isStylesVisible = !isStylesVisible;
+                InitRecylerView("캐주얼");
+                tv_casual.setText("스타일");
+            }else if(tv_casual.getText().equals("스타일")&&tv_title_style2.getText().equals("캐주얼")){
+                tv_title_style2.setText("스타일");
+                style="스타일";
+                ll_styles.setVisibility(View.GONE);
+                isStylesVisible = !isStylesVisible;
+                InitRecylerView("스타일");
+                tv_casual.setText("캐주얼");
+            }else{
+                tv_sports.setText("스포츠");
+                tv_title_style2.setText("캐주얼");
+                style="캐주얼";
+                ll_styles.setVisibility(View.GONE);
+                isStylesVisible = !isStylesVisible;
+                InitRecylerView("캐주얼");
+                tv_casual.setText("스타일");
+                tv_classic.setText("클래식");
+            }
         }else if(v.getId()==R.id.tv_classic2){
-            tv_title_style2.setText("클래식");
-            style="클래식";
-            ll_styles.setVisibility(View.GONE);
-            isStylesVisible = !isStylesVisible;
+            if(tv_classic.getText().equals("클래식")&&tv_title_style2.getText().equals("스타일")) {
+                tv_title_style2.setText("클래식");
+                style = "클래식";
+                ll_styles.setVisibility(View.GONE);
+                isStylesVisible = !isStylesVisible;
+                InitRecylerView("클래식");
+                tv_classic.setText("스타일");
+            }else if(tv_classic.getText().equals("스타일")&&tv_title_style2.getText().equals("클래식")){
+                tv_title_style2.setText("스타일");
+                style="스타일";
+                ll_styles.setVisibility(View.GONE);
+                isStylesVisible = !isStylesVisible;
+                InitRecylerView("스타일");
+                tv_classic.setText("클래식");
+            }else{
+                tv_sports.setText("스포츠");
+                tv_title_style2.setText("클래식");
+                style="클래식";
+                ll_styles.setVisibility(View.GONE);
+                isStylesVisible = !isStylesVisible;
+                InitRecylerView("클래식");
+                tv_casual.setText("캐주얼");
+                tv_classic.setText("스타일");
+            }
         }
-    }
-
-    public void InitRecylerView2(String style){
-
-        template_recycler.setVisibility(View.VISIBLE);
-        //template_recycler.setVisibility(View.GONE);
-
-        ArrayList<String> list = new ArrayList<>();
-        for (int i=0; i<3; i++) {
-            list.add(Integer.toString(temp)) ;
-        }
-        template_recycler.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false)) ;
-        TemplateAdapter adapter = new TemplateAdapter(list,this,mContext) ;
-        template_recycler.setAdapter(adapter) ;
     }
 
     @Override
@@ -175,7 +223,7 @@ public class fragment_tab0 extends Fragment  implements TemplateAdapter.AdapterC
 
         View view = inflater.inflate(R.layout.fragment_tab0, container, false);
         ButterKnife.bind(this, view);
-        InitRecylerView();
+        InitRecylerView("스타일");
         tv_time.setText(Time());
         GpsInit();
 
@@ -220,7 +268,7 @@ public class fragment_tab0 extends Fragment  implements TemplateAdapter.AdapterC
 
 
     //리스트 초기함수
-    public void InitRecylerView(){
+    public void InitRecylerView(String style){
 
         template_recycler.setVisibility(View.VISIBLE);
         //fr_fragment.setVisibility(View.GONE);
@@ -230,7 +278,7 @@ public class fragment_tab0 extends Fragment  implements TemplateAdapter.AdapterC
             list.add(Integer.toString(temp)) ;
         }
         template_recycler.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false)) ;
-        TemplateAdapter adapter = new TemplateAdapter(list,this,mContext) ;
+        TemplateAdapter adapter = new TemplateAdapter(list,this,mContext,style) ;
         template_recycler.setAdapter(adapter) ;
     }
 
@@ -701,7 +749,7 @@ public class fragment_tab0 extends Fragment  implements TemplateAdapter.AdapterC
                             tv_temperature3.setText(arr[3] + "º");
                             first=true;
                         }
-                        InitRecylerView();
+                        InitRecylerView("스타일");
 //                        DownloadFilesTask mDownloadFilesTask = new DownloadFilesTask(Check);
 //                        mDownloadFilesTask.execute();
                     }

@@ -20,12 +20,12 @@
 
         <ImageView
             android:id="@+id/iv_img0"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginEnd="5dp"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:src="@drawable/top"/>
+            android:background="@drawable/confirm_btn_round" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -34,21 +34,19 @@
 
             <ImageView
                 android:id="@+id/iv_img1"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_width="40dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/outer"/>
+                android:background="@drawable/confirm_btn_round" />
 
             <ImageView
                 android:id="@+id/iv_img2"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/bottom"/>
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/confirm_btn_round" />
 
         </LinearLayout>
 

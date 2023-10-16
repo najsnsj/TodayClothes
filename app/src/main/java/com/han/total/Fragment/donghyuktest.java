@@ -66,8 +66,6 @@ public class donghyuktest extends AppCompatActivity {
         imageView1 = findViewById(R.id.imageView1);
         imageView2 = findViewById(R.id.imageView2);
         imageView3 = findViewById(R.id.imageView3);
-        save_Btn = findViewById(R.id.save_Btn);
-        cha_Btn = findViewById(R.id.cha_Btn);
         date = getCurrentDate();
         diaryTextView.setText(date);
         contextEditText.setFocusable(false);
@@ -89,9 +87,6 @@ public class donghyuktest extends AppCompatActivity {
                 intent.putExtra("condition","캘린더");
                 intent.putExtra("date",date);
                 startActivity(intent);
-                finish();
-                /*intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-                startActivityForResult(intent, REQUEST_IMAGE_PICK);*/
             }
         });
 
@@ -104,7 +99,6 @@ public class donghyuktest extends AppCompatActivity {
                 intent.putExtra("condition","캘린더");
                 intent.putExtra("date",date);
                 startActivity(intent);
-                finish();
             }
         });
 
@@ -117,21 +111,15 @@ public class donghyuktest extends AppCompatActivity {
                 intent.putExtra("condition","캘린더");
                 intent.putExtra("date",date);
                 startActivity(intent);
-                finish();
             }
         });
-        imageView1.setClickable(false);
-        imageView2.setClickable(false);
-        imageView3.setClickable(false);
+
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                 imageView1.setImageResource(0);
-                imageView1.setClickable(false);
                 imageView2.setImageResource(0);
-                imageView2.setClickable(false);
                 imageView3.setImageResource(0);
-                imageView3.setClickable(false);
                 contextEditText.setFocusable(false);
                 date = String.format("%d / %d / %d", year, month + 1, dayOfMonth);
                 diaryTextView.setVisibility(View.VISIBLE);
@@ -146,28 +134,6 @@ public class donghyuktest extends AppCompatActivity {
             }
         });
 
-        save_Btn.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                data.getInstance(mContext).setDay(date,contextEditText.getText().toString());
-                contextEditText.setFocusable(false);
-                imageView1.setClickable(false);
-                imageView2.setClickable(false);
-                imageView3.setClickable(false);
-            }
-        });
-
-        cha_Btn.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                contextEditText.setFocusable(true);
-                contextEditText.setFocusableInTouchMode(true);
-                contextEditText.setClickable(true);
-                imageView1.setClickable(true);
-                imageView2.setClickable(true);
-                imageView3.setClickable(true);
-            }
-        });
     }
 
     public String getCurrentDate() {

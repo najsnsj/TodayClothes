@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,8 +25,14 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class TemplateAdapter extends RecyclerView.Adapter<TemplateAdapter.ViewHolder> {
+import butterknife.BindView;
+import butterknife.OnClick;
 
+public class TemplateAdapter extends RecyclerView.Adapter<TemplateAdapter.ViewHolder> {
+@BindView(R.id.tv_sport2)
+TextView tv_sports;
+    @BindView(R.id.tv_title_style2)
+    TextView tv_title;
     //
     public interface AdapterCallback {
         void DoSomeThing(int position);
@@ -35,12 +42,14 @@ public class TemplateAdapter extends RecyclerView.Adapter<TemplateAdapter.ViewHo
     private AdapterCallback mAdapterCallback;
     Context mContext;
     boolean onoff=true;
+    private String style = null;
 
-    public TemplateAdapter(ArrayList<String> list,TemplateAdapter.AdapterCallback AdapterCallback,Context context) {
+    public TemplateAdapter(ArrayList<String> list,TemplateAdapter.AdapterCallback AdapterCallback,Context context,String Cstyle) {
         mData = list ;
         mContext = context;
         onoff = true;
         mAdapterCallback = AdapterCallback;
+        style = Cstyle;
     }
 
     public TemplateAdapter(ArrayList<String> list,TemplateAdapter.AdapterCallback AdapterCallback,Context context,boolean flag) {
@@ -48,6 +57,7 @@ public class TemplateAdapter extends RecyclerView.Adapter<TemplateAdapter.ViewHo
         mContext = context;
         onoff = flag;
         mAdapterCallback = AdapterCallback;
+
     }
 
 
@@ -103,13 +113,101 @@ public class TemplateAdapter extends RecyclerView.Adapter<TemplateAdapter.ViewHo
         TemplateAdapter.ViewHolder vh = new TemplateAdapter.ViewHolder(view) ;
         return vh ;
     }
+
     @Override
+    public void onBindViewHolder(TemplateAdapter.ViewHolder holder, int position) {
+        String text = mData.get(position);
+        int temp = Integer.parseInt(text);
+        String season;
+        if (temp > 20) {season = "여름";} else if (temp > 5) {season = "봄";} else {season = "겨울";}
+        classifyItemByStyle(holder, season);
+    }
+
+
+    private void classifyItemByStyle(TemplateAdapter.ViewHolder holder, String season) {
+        String name1 = "";
+        String name2 = "";
+        String name3 = "";
+        ArrayList<String> CList1 = new ArrayList<>();
+        ArrayList<String> CList2 = new ArrayList<>();
+        ArrayList<String> CList3 = new ArrayList<>();
+        if (onoff) {
+            if (style.equals("스포츠")) {
+                for (int i = 1; i < 10; i++) {
+                    if (data.getInstance(mContext).getStyle("상의" + season, i).equals("스포츠")) {
+                        CList1.add(data.getInstance(mContext).getPicture("상의" + season, i));
+                    }
+                    if (data.getInstance(mContext).getStyle("아우터" + season, i).equals("스포츠")) {
+                        CList2.add(data.getInstance(mContext).getPicture("아우터" + season, i));
+                    }
+                    if (data.getInstance(mContext).getStyle("하의" + season, i).equals("스포츠")) {
+                        CList3.add(data.getInstance(mContext).getPicture("하의" + season, i));
+                    }
+                }
+            } else if (style.equals("캐주얼")) {
+                for (int i = 1; i < 10; i++) {
+                    if (data.getInstance(mContext).getStyle("상의" + season, i).equals("캐주얼")) {
+                        CList1.add(data.getInstance(mContext).getPicture("상의" + season, i));
+                    }
+                    if (data.getInstance(mContext).getStyle("아우터" + season, i).equals("캐주얼")) {
+                        CList2.add(data.getInstance(mContext).getPicture("아우터" + season, i));
+                    }
+                    if (data.getInstance(mContext).getStyle("하의" + season, i).equals("캐주얼")) {
+                        CList3.add(data.getInstance(mContext).getPicture("하의" + season, i));
+                    }
+                }
+            } else if (style.equals("클래식")) {
+                for (int i = 1; i < 10; i++) {
+                    if (data.getInstance(mContext).getStyle("상의" + season, i).equals("클래식")) {
+                        CList1.add(data.getInstance(mContext).getPicture("상의" + season, i));
+                    }
+                    if (data.getInstance(mContext).getStyle("아우터" + season, i).equals("클래식")) {
+                        CList2.add(data.getInstance(mContext).getPicture("아우터" + season, i));
+                    }
+                    if (data.getInstance(mContext).getStyle("하의" + season, i).equals("클래식")) {
+                        CList3.add(data.getInstance(mContext).getPicture("하의" + season, i));
+                    }
+                }
+            }
+            if (CList1.size() < 1) {
+                holder.iv_img0.setImageResource(0);
+            } else {
+                name1 = CList1.get(Random(CList1.size()) - 1);
+                loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/", name1, holder, 0);
+            }
+            if (CList2.size() < 1) {
+                holder.iv_img1.setImageResource(0);
+            } else {
+                name2 = CList2.get(Random(CList2.size()) - 1);
+                loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/", name2, holder, 1);
+            }
+            if (CList3.size() < 1) {
+                holder.iv_img2.setImageResource(0);
+            } else {
+                name3 = CList3.get(Random(CList3.size()) - 1);
+                loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/", name3, holder, 2);
+            }
+            if (style.equals("스타일")) {
+                name1 = data.getInstance(mContext).getPicture("상의" + season, Random(data.getInstance(mContext).getNumber("상의" + season)));
+                name2 = data.getInstance(mContext).getPicture("아우터" + season, Random(data.getInstance(mContext).getNumber("아우터" + season)));
+                name3 = data.getInstance(mContext).getPicture("하의" + season, Random(data.getInstance(mContext).getNumber("하의" + season)));
+                loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/", name1, holder, 0);
+                loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/", name2, holder, 1);
+                loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/", name3, holder, 2);
+            }
+        } else {
+            holder.iv_img0.setImageResource(0);
+            holder.iv_img1.setImageResource(0);
+            holder.iv_img2.setImageResource(0);
+        }
+    }
+
+    /*@Override
     public void onBindViewHolder(TemplateAdapter.ViewHolder holder, int position) {
         String text = mData.get(position) ;
         int temp = Integer.parseInt(text);
         if(onoff) {
             Logg.e(Global.USER_HTJ,"온도: "+temp);
-
             if (temp > 20) {  //여름
                 String name1 = data.getInstance(mContext).getPicture("상의여름",Random(data.getInstance(mContext).getNumber("상의여름")));
                 String name2 = data.getInstance(mContext).getPicture("아우터여름",Random(data.getInstance(mContext).getNumber("아우터여름")));
@@ -137,8 +235,7 @@ public class TemplateAdapter extends RecyclerView.Adapter<TemplateAdapter.ViewHo
             holder.iv_img1.setImageResource(data.getInstance(mContext).getCloth( "1", position));
             holder.iv_img2.setImageResource(data.getInstance(mContext).getCloth( "2", position));
         }
-        //holder.textView1.setText(text) ;
-    }
+    }*/
 
     private void loadImageFromStorage(String path, String name,ViewHolder holder,int i)
     {
