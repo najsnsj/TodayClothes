@@ -174,6 +174,7 @@ public class SelectClothsActivity extends AppCompatActivity {
     @OnClick({R.id.tv_delete}) void ClickD(){
         if(tv_delete.getText().equals("삭제")){
             tv_delete.setText("확인");
+            tv_delete.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
             condition=1;
             ViewTrue(data.getInstance(mContext).getNumber(type + weather));
         }else if(tv_delete.getText().equals("확인")){
@@ -215,6 +216,7 @@ public class SelectClothsActivity extends AppCompatActivity {
             iv_4.setClickable(false); iv_5.setClickable(false); iv_6.setClickable(false);
             iv_7.setClickable(false); iv_8.setClickable(false); iv_9.setClickable(false);
             tv_delete.setText("삭제");
+            tv_delete.setBackgroundColor(getResources().getColor(android.R.color.darker_gray));
             condition=0;
             Dnum=0;
         }
