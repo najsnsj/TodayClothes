@@ -34,6 +34,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 import butterknife.OnClick;
 
@@ -46,11 +49,12 @@ public class donghyuktest extends AppCompatActivity {
     public CalendarView calendarView;
     public Button cha_Btn, del_Btn, save_Btn;
     public TextView diaryTextView, textView2, textView3;
-    public EditText contextEditText;
+    public TextView tv_Recommend;
     Bitmap bitmap;
     public ImageView imageView1;
     public ImageView imageView2;
     public ImageView imageView3;
+    public ImageView iv_Recommend;
 
     private static final int REQUEST_IMAGE_PICK = 1000;
     private static final int REQUEST_IMAGE_PICK_2 = 2000;
@@ -62,14 +66,14 @@ public class donghyuktest extends AppCompatActivity {
         setContentView(R.layout.activity_donghyuktest);
         calendarView = findViewById(R.id.calendarView);
         diaryTextView = findViewById(R.id.diaryTextView);
-        contextEditText = findViewById(R.id.contextEditText);
+        tv_Recommend = findViewById(R.id.tv_reco);
+        iv_Recommend = findViewById(R.id.iv_reco);
         imageView1 = findViewById(R.id.imageView1);
         imageView2 = findViewById(R.id.imageView2);
         imageView3 = findViewById(R.id.imageView3);
         date = getCurrentDate();
         diaryTextView.setText(date);
-        contextEditText.setFocusable(false);
-        contextEditText.setText(data.getInstance(mContext).getDay(date));
+        recommend(date);
         loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/", data.getInstance(mContext).getCALC(date, "아우터"), imageView1);
         loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/", data.getInstance(mContext).getCALC(date, "상의"), imageView2);
         loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/", data.getInstance(mContext).getCALC(date, "하의"), imageView3);
@@ -120,7 +124,6 @@ public class donghyuktest extends AppCompatActivity {
                 imageView1.setImageResource(0);
                 imageView2.setImageResource(0);
                 imageView3.setImageResource(0);
-                contextEditText.setFocusable(false);
                 date = String.format("%d / %d / %d", year, month + 1, dayOfMonth);
                 diaryTextView.setVisibility(View.VISIBLE);
                 loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/",data.getInstance(mContext).getCALC(date,"아우터"),imageView1);
@@ -129,7 +132,6 @@ public class donghyuktest extends AppCompatActivity {
                 //imageView3.setVisibility(View.INVISIBLE);
                 //contextEditText.setVisibility(View.VISIBLE);
                 diaryTextView.setText(date);
-                contextEditText.setText(data.getInstance(mContext).getDay(date));
                 //checkDay(year, month, dayOfMonth);
             }
         });
@@ -317,7 +319,11 @@ public class donghyuktest extends AppCompatActivity {
                 imageView1.setImageBitmap(b);
             }else if(iv.equals(imageView2)) {
                 imageView2.setImageBitmap(b);
-            }else imageView3.setImageBitmap(b);
+            }else if(iv.equals(imageView3)){
+                imageView3.setImageBitmap(b);
+            }else{
+                iv_Recommend.setImageBitmap(b);
+            }
         } catch (FileNotFoundException e) {
             Log.e("HAN", "exception: " + e);
             e.printStackTrace();
@@ -341,8 +347,232 @@ public class donghyuktest extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+    private void recommend(String date) {
+        int num = Random(2);
+        if(num==0){
+            int os1 = 0;int os2 = 0;int os3 = 0;int us1 = 0;int us2 = 0;int us3 = 0;
+            int ps1 = 0;int ps2 = 0;int ps3 = 0;int s1 = 0;int s2 = 0;int s3 = 0;
+            int o=0; int u=0; int p=0;
+            String a=null;
+            for (Map.Entry<String, String> entry : data.getInstance(mContext).getAllCALCValues("STYLE_KEY").entrySet()) {
+                String key = entry.getKey();
+                String value = entry.getValue();
+                key = key.replace("STYLE_KEY", "");
+                if(key.contains("아우터")){
+                    if(value.equals("스포츠")){
+                        os1++;
+                    }else if(value.equals("캐주얼")){
+                        os2++;
+                    }else{
+                        os3++;
+                    }
+                    o++;
+                }else if(key.contains("상의")){
+                    if(value.equals("스포츠")){
+                        us1++;
+                    }else if(value.equals("캐주얼")){
+                        us2++;
+                    }else{
+                        us3++;
+                    }
+                    u++;
+                }else if(key.contains("하의")){
+                    if(value.equals("스포츠")){
+                        ps1++;
+                    }else if(value.equals("캐주얼")){
+                        ps2++;
+                    }else{
+                        ps3++;
+                    }
+                    p++;
+                }
 
-    @SuppressLint("WrongConstant")
+            }
+            int s = Random(3);
+            while(true) {
+                if (s == 0 && o != 0) {
+                    String style = null;
+                    if (os1 <= os2) {
+                        if (os2 <= os3) {
+                            style = "클래식";
+                        } else {
+                            style = "캐주얼";
+                        }
+                    } else if (os1 <= os3) {
+                        style = "클래식";
+                    } else {
+                        style = "스포츠";
+                    }
+                    tv_Recommend.setText("아우터 중 가장 많은 스타일은 " + style + " 입니다.");
+                    break;
+                } else if (s == 1 && u != 0) {
+                    String style = null;
+                    if (us1 <= us2) {
+                        if (us2 <= us3) {
+                            style = "클래식";
+                        } else {
+                            style = "캐주얼";
+                        }
+                    } else if (us1 <= us3) {
+                        style = "클래식";
+                    } else {
+                        style = "스포츠";
+                    }
+                    tv_Recommend.setText("상의 중 가장 많은 스타일은 " + style + " 입니다.");
+                    break;
+                } else if (s == 2 && p != 0) {
+                    String style = null;
+                    if (ps1 <= ps2) {
+                        if (ps2 <= ps3) {
+                            style = "클래식";
+                        } else {
+                            style = "캐주얼";
+                        }
+                    } else if (ps1 <= ps3) {
+                        style = "클래식";
+                    } else {
+                        style = "스포츠";
+                    }
+                    tv_Recommend.setText("하의 중 가장 많은 스타일은 " + style + " 입니다.");
+                    break;
+                } else if(s == 3 && o!=0 && u!=0 && p!=0){
+                    s1 = os1 + us1 + ps1;
+                    s2 = os2 + us2 + ps2;
+                    s3 = os3 + us3 + ps3;
+                    String style = null;
+                    if (s1 <= s2) {
+                        if (s2 <= s3) {
+                            style = "클래식";
+                        } else {
+                            style = "캐주얼";
+                        }
+                    } else if (s1 <= s3) {
+                        style = "클래식";
+                    } else {
+                        style = "스포츠";
+                    }
+                    tv_Recommend.setText("가장 많이 가지고 있는 스타일은 " + style + " 입니다.");
+                    break;
+                }else if(o==0 && u==0 && p==0){
+                    tv_Recommend.setText("캘린더에 옷을 등록해보세요.");
+                    break;
+                }else{
+                    s = Random(3);
+                }
+            }
+        } else if(num==1) {
+            Map<String, String> allCALCValues = data.getInstance(mContext).getAllCALCValues("day_note_key");
+            String[] clothes = new String[allCALCValues.size()];
+            String[] day = new String[allCALCValues.size()];
+            int n = 0;
+            for (Map.Entry<String, String> entry : data.getInstance(mContext).getAllCALCValues("day_note_key").entrySet()) {
+                String key = entry.getKey();
+                day[n] = entry.getValue();
+                clothes[n] = key.replace("day_note_key", "");
+                n++;
+            }
+            if (n == 0) {
+                tv_Recommend.setText("캘린더에 옷을 등록해보세요.");
+            } else {
+                int numR = Random(n - 1);
+                tv_Recommend.setText(" 마지막으로 이 의상을 입은 날은 \n " + day[numR] + "일 입니다.");
+                loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/", clothes[numR], iv_Recommend);
+            }
+        }else if(num==2){
+            //3개월 동안 가장 많이 입은 옷
+            Map<String, Integer> calCloths = new HashMap<>();
+            String[] today = date.split(" / ");
+            int n = -1;
+            int TNum= -1; int num1 = -1;int num2 = -1;int num3 = -1;
+            String Tcloth=null;String cloth1=null;String cloth2=null;String cloth3=null;
+            int m1 = Integer.parseInt(today[1])-1; String month1 = String.valueOf(m1);
+            int m2 = Integer.parseInt(today[1])-2; String month2 = String.valueOf(m2);
+            for (Map.Entry<String, String> entry : data.getInstance(mContext).getAllCALCValues("CAL_CLOTH_KEY").entrySet()) {
+                String key = entry.getKey();
+                String value = entry.getValue();
+                key = key.replace("CAL_CLOTH_KEY", "");
+                if(key.contains(today[0])&&key.contains(today[1])){
+                    if(calCloths.containsKey(value)){
+                        calCloths.put(value, calCloths.get(value)+1);
+                    }else{
+                        calCloths.put(value,1);
+                    }
+                }else if(key.contains(today[0])&&key.contains(month1)){
+                    if(calCloths.containsKey(value)){
+                        calCloths.put(value, calCloths.get(value)+1);
+                    }else{
+                        calCloths.put(value,1);
+                    }
+                }else if(key.contains(today[0])&&key.contains(month2)){
+                    if(calCloths.containsKey(value)){
+                        calCloths.put(value, calCloths.get(value)+1);
+                    }else{
+                        calCloths.put(value,1);
+                    }
+                }
+            }
+            for(String key: calCloths.keySet()){
+                if(TNum<calCloths.get(key)){
+                    Tcloth = key;
+                    TNum=calCloths.get(key);
+                }
+                if(key.contains("아우터")&&num1<calCloths.get(key)){
+                    cloth1 = key;
+                    num1 = calCloths.get(key);
+                }
+                if(key.contains("상의")&&num2<calCloths.get(key)){
+                    cloth2 = key;
+                    num2 = calCloths.get(key);
+                }
+                if(key.contains("하의")&&num3<calCloths.get(key)){
+                    cloth3 = key;
+                    num3 = calCloths.get(key);
+                }
+            }
+            n = Random(3);
+            while(true) {
+                if (n == 0 && TNum != -1) {
+                    tv_Recommend.setText(" 최근 3개월간 가장 많이 입은 옷은\n " + Tcloth + "입니다.");
+                    loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/", Tcloth, iv_Recommend);
+                    break;
+                } else if (n == 1 && num1 != -1) {
+                    tv_Recommend.setText(" 최근 3개월간 가장 많이 입은 아우터는\n " + cloth1 + "입니다.");
+                    loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/", cloth1, iv_Recommend);
+                    break;
+                } else if (n == 2 && num2 != -1) {
+                    tv_Recommend.setText(" 최근 3개월간 가장 많이 입은 상의는\n " + cloth2 + "입니다.");
+                    loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/", cloth2, iv_Recommend);
+                    break;
+                } else if (n == 3 && num3 != -1) {
+                    tv_Recommend.setText(" 최근 3개월간 가장 많이 입은 하의는\n " + cloth3 + "입니다.");
+                    loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/", cloth3, iv_Recommend);
+                    break;
+                } else if (TNum == -1 && num1 == -1 && num2 == -1 && num3 == -1) {
+                    tv_Recommend.setText("캘린더에 옷을 등록해보세요.");
+                    break;
+                } else {
+                    n = Random(3);
+                }
+            }
+        }
+    }
+
+    int Random(int i) {
+        if (i < 0) {
+            return 0; // i가 음수일 때 0을 반환
+        } else {
+            int max_num_value = i;
+            int min_num_value = 0;
+
+            Random random = new Random();
+
+            int randomNum = random.nextInt(max_num_value - min_num_value + 1) + min_num_value;
+            return randomNum;
+        }
+    }
+
+
+   /* @SuppressLint("WrongConstant")
     public void saveDiary(String readDay)
     {
         FileOutputStream fos;
@@ -358,5 +588,5 @@ public class donghyuktest extends AppCompatActivity {
             e.printStackTrace();
         }
 
-    }
+    }*/
 }

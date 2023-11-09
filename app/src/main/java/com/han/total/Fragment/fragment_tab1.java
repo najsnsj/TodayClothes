@@ -1,6 +1,5 @@
 package com.han.total.Fragment;
 
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -8,8 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -18,16 +16,17 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.han.total.Adapter.TemplateAdapter;
+import com.han.total.Activity.MainActivity;
+import com.han.total.Classifier.ClassifierWithModel;
 import com.han.total.R;
 import com.han.total.Util.Global;
 import com.han.total.Util.Logg;
@@ -38,7 +37,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
+import java.util.Locale;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -47,6 +46,7 @@ public class fragment_tab1 extends Fragment{
     private Context mContext;
     private static final int CAMEARA_REQUEST_CODE = 101;
     private static final int GALLERY_REQUEST_CODE = 102;
+    private com.han.total.Classifier.ClassifierWithModel cls;
     @BindView(R.id.ll_weather)
     LinearLayout ll_weather;
     @BindView(R.id.ll_type)
@@ -79,8 +79,15 @@ public class fragment_tab1 extends Fragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        cls = new ClassifierWithModel(mContext.getApplicationContext());
+        try {
+            cls.init();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
         if (getArguments() != null) {
         }
+
     }
 
     @Override
@@ -117,7 +124,6 @@ public class fragment_tab1 extends Fragment{
             Clear();
             ll_style.setVisibility(View.VISIBLE);
         }else if(v.getId()==R.id.ll_winter0){
-            Toast.makeText(mContext,"사진이 저장되었습니다.",Toast.LENGTH_SHORT).show();
             Save(type,weather,style);
         }
     }
@@ -181,6 +187,22 @@ public class fragment_tab1 extends Fragment{
                     iv_camera.setImageBitmap(bitmap);
                     if (bitmap != null) {
                         //iv_0.setImageBitmap(bitmap);
+                        Pair<String, Float> output = cls.classify(bitmap);
+                        String resultStr = String.format(Locale.ENGLISH,
+                                "class : %s, prob : %.2f%%",
+                                output.first, output.second * 100);
+                        if(isOutterGarment(output.first)){
+                            resultStr = "아우터";
+                        }else if(isUpperGarment(output.first)) {
+                            resultStr = "상의";
+                        }else if(isLowerGarment(output.first)) {
+                            resultStr = "하의";
+                        }else{
+                            resultStr = "아우터";
+                        }
+                        tv_title_type.setText(resultStr);
+                        type=resultStr;
+                        //imageView.setImageBitmap(bitmap);
                     }
 
                 }
@@ -192,6 +214,21 @@ public class fragment_tab1 extends Fragment{
                         try {
                             bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageUri);
                             iv_camera.setImageBitmap(bitmap);
+                            Pair<String, Float> output = cls.classify(bitmap);
+                            String resultStr = String.format(Locale.ENGLISH,
+                                    "class : %s, prob : %.2f%%",
+                                    output.first, output.second * 100);
+                            if(isOutterGarment(output.first)){
+                                resultStr = "아우터";
+                            }else if(isUpperGarment(output.first)) {
+                                resultStr = "상의";
+                            }else if(isLowerGarment(output.first)) {
+                                resultStr = "하의";
+                            }else{
+                                resultStr = "아우터";
+                            }
+                            tv_title_type.setText(resultStr);
+                            type=resultStr;
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -202,6 +239,59 @@ public class fragment_tab1 extends Fragment{
         }
     }
 
+    @Override
+    public void onDestroy() {
+        cls.finish();
+        super.onDestroy();
+    }
+
+    private boolean isLowerGarment(String className) {
+        String[] lowerGarments = {
+                "bikini", "jockstrap", "miniskirt", "pajama", "pantyhose",
+                "sarong", "skirt", "slacks", "socks", "stocking",
+                "swimming trunks", "trousers", "underpants", "vase", "jean","abaya"
+        };
+
+        for (String garment : lowerGarments) {
+            if (className.equalsIgnoreCase(garment)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isOutterGarment(String className){
+        String[] outterGarments = {
+                "sweatshirt","suit","cardigan","fur coat","academic gown","bathrobe"
+        };
+        for (String garment : outterGarments) {
+            if (className.equalsIgnoreCase(garment)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isUpperGarment(String className) {
+        String[] upperGarments = {
+                "apron", "wool","velvet",
+                "bikini", "binder", "bonnet", "bow tie", "brassiere",
+                "bulletproof vest", "cocktail dress", "cravat",
+                "diadem", "dinner jacket", "dressing gown", "gown","hoodie", "jockstrap",
+                "kimono", "lab coat", "life jacket", "loafer", "neck brace",
+                "nightshirt", "pajama", "sarong", "scarf", "shawl",
+                "silk dress", "ski mask", "slipper", "sombrero", "stole", "tiara", "tunic",
+                "turban", "tuxedo", "uniform", "veil", "vest", "jersey"
+        };
+
+        for (String garment : upperGarments) {
+            if (className.equalsIgnoreCase(garment)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     void Save(String type, String weather, String style) {
         String path="";
         String name="";
@@ -210,25 +300,28 @@ public class fragment_tab1 extends Fragment{
         Logg.e(Global.USER_HTJ,"저장 스타일: "+style);
         Logg.e(Global.USER_HTJ,"data.getInstance(mContext).setNumber(2,type+weather);: "+data.getInstance(mContext).getNumber(type+weather));
 
-        if(data.getInstance(mContext).getNumC(type+weather)==9) {
+        /*if(data.getInstance(mContext).getNumC(type+weather)==9) {
             data.getInstance(mContext).setNumC(0, type + weather);
-        }
-        if(data.getInstance(mContext).getNumber(type+weather)!=9){
+        }*/
+        if(data.getInstance(mContext).getNumber(type+weather)!=18) {
             data.getInstance(mContext).setNumber(data.getInstance(mContext).getNumber(type + weather) + 1, type + weather);
+            data.getInstance(mContext).setNumC(data.getInstance(mContext).getNumC(type + weather) + 1, type + weather);
+            data.getInstance(mContext).setStyle(style, type + weather, data.getInstance(mContext).getNumber(type + weather));
+            name = type + weather + data.getInstance(mContext).getNumC(type + weather) + ".jpg";
+            data.getInstance(mContext).setPicture(name, type + weather, data.getInstance(mContext).getNumC(type + weather));
+            path = createPictureFilePath(name);
+            data.getInstance(mContext).setRegister(type + weather, data.getInstance(mContext).getNumber(type + weather), name);
+            Logg.e(Global.USER_HTJ, "저장 name: " + data.getInstance(mContext).getNumC(type + weather));
+            Logg.e(Global.USER_HTJ, "저장 name: " + name);
+            Logg.e(Global.USER_HTJ, "저장 path: " + path);
+            Logg.e(Global.USER_HTJ, "path:" + path);
+            saveBitmapAsFile(bitmap, path);
+            scanMediaFile(new File(path));
+            Intent intent = new Intent(getActivity(), MainActivity.class);
+            startActivity(intent);
+        }else {
+            Toast.makeText(mContext, "갯수를 초과했습니다.", Toast.LENGTH_SHORT).show();
         }
-        data.getInstance(mContext).setNumC(data.getInstance(mContext).getNumC(type + weather) + 1, type + weather);
-        data.getInstance(mContext).setStyle(style, type + weather, data.getInstance(mContext).getNumC(type + weather));
-        name = type + weather + data.getInstance(mContext).getNumC(type + weather) + ".jpg";
-        data.getInstance(mContext).setPicture(name, type + weather, data.getInstance(mContext).getNumC(type + weather));
-        path = createPictureFilePath(name);
-        Logg.e(Global.USER_HTJ, "저장 name: " + data.getInstance(mContext).getNumC(type + weather));
-        Logg.e(Global.USER_HTJ, "저장 name: " + name);
-        Logg.e(Global.USER_HTJ, "저장 path: " + path);
-
-
-        Logg.e(Global.USER_HTJ,"path:"+path);
-        saveBitmapAsFile(bitmap,path);
-        scanMediaFile(new File(path));
     }
 
 

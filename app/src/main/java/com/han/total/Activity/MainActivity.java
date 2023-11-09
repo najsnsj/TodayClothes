@@ -18,7 +18,7 @@ import android.widget.FrameLayout;
 
 import com.han.total.Adapter.TemplateAdapter;
 
-import com.han.total.DeepMainActivity;
+import com.han.total.Classifier.DeepMainActivity;
 import com.han.total.Fragment.fragment_tab0;
 
 import com.han.total.Fragment.fragment_tab1;

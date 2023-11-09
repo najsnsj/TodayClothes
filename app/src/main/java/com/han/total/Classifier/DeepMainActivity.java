@@ -1,4 +1,4 @@
-package com.han.total;
+package com.han.total.Classifier;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 import android.content.Intent;
 import android.widget.Button;
+
+import com.han.total.R;
 
 public class DeepMainActivity extends AppCompatActivity {
 

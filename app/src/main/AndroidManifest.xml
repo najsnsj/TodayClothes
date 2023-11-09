@@ -19,13 +19,13 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".DeepCameraActivity"
+            android:name=".Classifier.DeepCameraActivity"
             android:exported="true" />
         <activity
-            android:name=".DeepGalleryActivity"
+            android:name=".Classifier.DeepGalleryActivity"
             android:exported="true" />
         <activity
-            android:name=".DeepMainActivity"
+            android:name=".Classifier.DeepMainActivity"
             android:exported="true" />
         <activity
             android:name=".Fragment.donghyuktest"

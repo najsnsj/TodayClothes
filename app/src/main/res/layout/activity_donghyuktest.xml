@@ -66,16 +66,32 @@
     </LinearLayout>
 
 
-    <EditText
-        android:id="@+id/contextEditText"
+    <LinearLayout
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/confirm_btn_round"
-        android:ems="10"
-        android:hint="오늘의 옷을 미리 정해보세요"
-        android:inputType="textMultiLine"
-        android:textStyle="bold" />
+        android:background="@drawable/confirm_btn_round">
+        <ImageView
+            android:id="@+id/iv_reco"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/confirm_btn_round"
+            android:layout_marginLeft="10dp"/>
+
+        <TextView
+            android:id="@+id/tv_reco"
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/confirm_btn_round"
+            android:gravity="center_vertical"
+            android:hint="오늘의 옷을 미리 정해보세요"
+            android:textSize="15dp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
 
 </LinearLayout>

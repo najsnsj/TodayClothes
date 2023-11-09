@@ -133,39 +133,39 @@ TextView tv_sports;
         ArrayList<String> CList3 = new ArrayList<>();
         if (onoff) {
             if (style.equals("스포츠")) {
-                for (int i = 1; i < 10; i++) {
+                for (int i = 1; i < 19; i++) {
                     if (data.getInstance(mContext).getStyle("상의" + season, i).equals("스포츠")) {
-                        CList1.add(data.getInstance(mContext).getPicture("상의" + season, i));
+                        CList1.add(data.getInstance(mContext).getRegister("상의" + season, i));
                     }
                     if (data.getInstance(mContext).getStyle("아우터" + season, i).equals("스포츠")) {
-                        CList2.add(data.getInstance(mContext).getPicture("아우터" + season, i));
+                        CList2.add(data.getInstance(mContext).getRegister("아우터" + season, i));
                     }
                     if (data.getInstance(mContext).getStyle("하의" + season, i).equals("스포츠")) {
-                        CList3.add(data.getInstance(mContext).getPicture("하의" + season, i));
+                        CList3.add(data.getInstance(mContext).getRegister("하의" + season, i));
                     }
                 }
             } else if (style.equals("캐주얼")) {
-                for (int i = 1; i < 10; i++) {
+                for (int i = 1; i < 19; i++) {
                     if (data.getInstance(mContext).getStyle("상의" + season, i).equals("캐주얼")) {
-                        CList1.add(data.getInstance(mContext).getPicture("상의" + season, i));
+                        CList1.add(data.getInstance(mContext).getRegister("상의" + season, i));
                     }
                     if (data.getInstance(mContext).getStyle("아우터" + season, i).equals("캐주얼")) {
-                        CList2.add(data.getInstance(mContext).getPicture("아우터" + season, i));
+                        CList2.add(data.getInstance(mContext).getRegister("아우터" + season, i));
                     }
                     if (data.getInstance(mContext).getStyle("하의" + season, i).equals("캐주얼")) {
-                        CList3.add(data.getInstance(mContext).getPicture("하의" + season, i));
+                        CList3.add(data.getInstance(mContext).getRegister("하의" + season, i));
                     }
                 }
             } else if (style.equals("클래식")) {
-                for (int i = 1; i < 10; i++) {
+                for (int i = 1; i < 19; i++) {
                     if (data.getInstance(mContext).getStyle("상의" + season, i).equals("클래식")) {
-                        CList1.add(data.getInstance(mContext).getPicture("상의" + season, i));
+                        CList1.add(data.getInstance(mContext).getRegister("상의" + season, i));
                     }
                     if (data.getInstance(mContext).getStyle("아우터" + season, i).equals("클래식")) {
-                        CList2.add(data.getInstance(mContext).getPicture("아우터" + season, i));
+                        CList2.add(data.getInstance(mContext).getRegister("아우터" + season, i));
                     }
                     if (data.getInstance(mContext).getStyle("하의" + season, i).equals("클래식")) {
-                        CList3.add(data.getInstance(mContext).getPicture("하의" + season, i));
+                        CList3.add(data.getInstance(mContext).getRegister("하의" + season, i));
                     }
                 }
             }
@@ -173,13 +173,13 @@ TextView tv_sports;
                 holder.iv_img0.setImageResource(0);
             } else {
                 name1 = CList1.get(Random(CList1.size()) - 1);
-                loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/", name1, holder, 0);
+                loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/", name1, holder, 1);
             }
             if (CList2.size() < 1) {
                 holder.iv_img1.setImageResource(0);
             } else {
                 name2 = CList2.get(Random(CList2.size()) - 1);
-                loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/", name2, holder, 1);
+                loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/", name2, holder, 0);
             }
             if (CList3.size() < 1) {
                 holder.iv_img2.setImageResource(0);
@@ -188,11 +188,11 @@ TextView tv_sports;
                 loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/", name3, holder, 2);
             }
             if (style.equals("스타일")) {
-                name1 = data.getInstance(mContext).getPicture("상의" + season, Random(data.getInstance(mContext).getNumber("상의" + season)));
-                name2 = data.getInstance(mContext).getPicture("아우터" + season, Random(data.getInstance(mContext).getNumber("아우터" + season)));
-                name3 = data.getInstance(mContext).getPicture("하의" + season, Random(data.getInstance(mContext).getNumber("하의" + season)));
-                loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/", name1, holder, 0);
-                loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/", name2, holder, 1);
+                name1 = data.getInstance(mContext).getRegister("상의" + season, Random(data.getInstance(mContext).getNumber("상의" + season)));
+                name2 = data.getInstance(mContext).getRegister("아우터" + season, Random(data.getInstance(mContext).getNumber("아우터" + season)));
+                name3 = data.getInstance(mContext).getRegister("하의" + season, Random(data.getInstance(mContext).getNumber("하의" + season)));
+                loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/", name1, holder, 1);
+                loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/", name2, holder, 0);
                 loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/", name3, holder, 2);
             }
         } else {

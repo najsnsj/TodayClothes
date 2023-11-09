@@ -1,4 +1,6 @@
-package com.han.total;
+package com.han.total.Classifier;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,7 +9,6 @@ import android.graphics.ImageDecoder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.util.Pair;
@@ -15,18 +16,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.FileProvider;
+import com.han.total.R;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 
-public class DeepCameraActivity extends AppCompatActivity {
-    public static final String TAG = "[IC]CameraActivity";
-    public static final int CAMERA_IMAGE_REQUEST_CODE = 1;
-    private static final String KEY_SELECTED_URI = "KEY_SELECTED_URI";
+public class DeepGalleryActivity extends AppCompatActivity {
+    public static final String TAG = "[IC]GalleryActivity";
+    public static final int GALLERY_IMAGE_REQUEST_CODE = 1;
 
     private ClassifierWithModel cls;
     private ImageView imageView;
@@ -34,15 +31,13 @@ public class DeepCameraActivity extends AppCompatActivity {
 
 //    private Button newButton;
 
-    Uri selectedImageUri;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_deepcamera);
+        setContentView(R.layout.activity_deepgallery);
 
-        Button takeBtn = findViewById(R.id.deeptakeBtn);
-        takeBtn.setOnClickListener(v -> getImageFromCamera());
+        Button selectBtn = findViewById(R.id.deepselectBtn);
+        selectBtn.setOnClickListener(v -> getImageFromGallery());
 //        Button newButton = findViewById(R.id.newButton);
 
 
@@ -55,48 +50,35 @@ public class DeepCameraActivity extends AppCompatActivity {
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
-
-        if(savedInstanceState != null) {
-            Uri uri = savedInstanceState.getParcelable(KEY_SELECTED_URI);
-            if (uri != null)
-                selectedImageUri = uri;
-        }
     }
 
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        outState.putParcelable(KEY_SELECTED_URI, selectedImageUri);
-    }
-
-    private void getImageFromCamera(){
-        File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "picture.jpg");
-        selectedImageUri = FileProvider.getUriForFile(this, getPackageName(), file);
-
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, selectedImageUri);
-        startActivityForResult(intent, CAMERA_IMAGE_REQUEST_CODE);
+    private void getImageFromGallery(){
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT).setType("image/*");
+//        Intent intent = new Intent(Intent.ACTION_PICK,
+//                MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        startActivityForResult(intent, GALLERY_IMAGE_REQUEST_CODE);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
         super.onActivityResult(requestCode, resultCode, data);
-
         if (resultCode == Activity.RESULT_OK &&
-                requestCode == CAMERA_IMAGE_REQUEST_CODE) {
+                requestCode == GALLERY_IMAGE_REQUEST_CODE) {
+            if (data == null) {
+                return;
+            }
 
-            Uri selectedImageUri = data.getData();
-
+            Uri selectedImage = data.getData();
             Bitmap bitmap = null;
+
             try {
                 if(Build.VERSION.SDK_INT >= 29) {
-                    ImageDecoder.Source src = ImageDecoder.createSource(
-                            getContentResolver(), selectedImageUri);
+                    ImageDecoder.Source src =
+                            ImageDecoder.createSource(getContentResolver(), selectedImage);
                     bitmap = ImageDecoder.decodeBitmap(src);
                 } else {
-                    bitmap = MediaStore.Images.Media.getBitmap(
-                            getContentResolver(), selectedImageUri);
+                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
                 }
             } catch (IOException ioe) {
                 Log.e(TAG, "Failed to read Image", ioe);
@@ -107,7 +89,9 @@ public class DeepCameraActivity extends AppCompatActivity {
                 String resultStr = String.format(Locale.ENGLISH,
                         "class : %s, prob : %.2f%%",
                         output.first, output.second * 100);
-
+                if(isOutterGarment(output.first)){
+                    resultStr = "아우터";
+                }
                 // 여기에서 결과값을 확인하여 특정 단어에 해당한다면 "상의"로 변경
                 if(isUpperGarment(output.first)) {
                     resultStr = "상의";
@@ -118,10 +102,10 @@ public class DeepCameraActivity extends AppCompatActivity {
                     resultStr = "하의";
                 }
 
+                textView.setText(output.first+output);
                 imageView.setImageBitmap(bitmap);
-                textView.setText(resultStr);
 
-//                // 결과값이 출력되면 newButton을 보이게 설정
+                // 결과값이 출력되면 newButton을 보이게 설정
 //                newButton.setVisibility(View.VISIBLE);
             }
 
@@ -138,7 +122,7 @@ public class DeepCameraActivity extends AppCompatActivity {
         String[] lowerGarments = {
                 "bikini", "jockstrap", "miniskirt", "pajama", "pantyhose",
                 "sarong", "skirt", "slacks", "socks", "stocking",
-                "swimming trunks", "trousers", "underpants", "vase", "wool", "jean"
+                "swimming trunks", "trousers", "underpants", "vase", "jean"
         };
 
         for (String garment : lowerGarments) {
@@ -149,18 +133,27 @@ public class DeepCameraActivity extends AppCompatActivity {
         return false;
     }
 
+    private boolean isOutterGarment(String className){
+        String[] outterGarments = {
+                "sweatshirt","suit","cardigan","fur coat","academic gown","bathrobe"
+        };
+        for (String garment : outterGarments) {
+            if (className.equalsIgnoreCase(garment)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private boolean isUpperGarment(String className) {
         String[] upperGarments = {
-                "academic gown","sweatshirt", "apron", "bandana", "bandanna", "bathrobe",
+                "apron", "wool",
                 "bikini", "binder", "bonnet", "bow tie", "brassiere",
-                "bulletproof vest", "cardigan", "cocktail dress", "cravat",
-                "diadem", "dinner jacket", "dressing gown", "ear muff",
-                "face mask", "feather boa", "fur coat", "gown", "handkerchief",
-                "hard hat", "hat", "headband", "hoodie", "jockstrap",
+                "bulletproof vest", "cocktail dress", "cravat",
+                "diadem", "dinner jacket", "dressing gown", "gown","hoodie", "jockstrap",
                 "kimono", "lab coat", "life jacket", "loafer", "neck brace",
                 "nightshirt", "pajama", "sarong", "scarf", "shawl",
-                "silk dress", "ski mask", "slipper", "sombrero", "stole",
-                "suit", "sunhat", "sunglasses", "tiara", "tunic",
+                "silk dress", "ski mask", "slipper", "sombrero", "stole", "tiara", "tunic",
                 "turban", "tuxedo", "uniform", "veil", "vest", "jersey"
         };
 

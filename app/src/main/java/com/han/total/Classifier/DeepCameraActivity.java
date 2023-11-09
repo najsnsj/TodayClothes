@@ -1,6 +1,4 @@
-package com.han.total;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.han.total.Classifier;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -9,6 +7,7 @@ import android.graphics.ImageDecoder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.util.Pair;
@@ -16,12 +15,20 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
+
+import com.han.total.R;
+
+import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 
-public class DeepGalleryActivity extends AppCompatActivity {
-    public static final String TAG = "[IC]GalleryActivity";
-    public static final int GALLERY_IMAGE_REQUEST_CODE = 1;
+public class DeepCameraActivity extends AppCompatActivity {
+    public static final String TAG = "[IC]CameraActivity";
+    public static final int CAMERA_IMAGE_REQUEST_CODE = 1;
+    private static final String KEY_SELECTED_URI = "KEY_SELECTED_URI";
 
     private ClassifierWithModel cls;
     private ImageView imageView;
@@ -29,13 +36,15 @@ public class DeepGalleryActivity extends AppCompatActivity {
 
 //    private Button newButton;
 
+    Uri selectedImageUri;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_deepgallery);
+        setContentView(R.layout.activity_deepcamera);
 
-        Button selectBtn = findViewById(R.id.deepselectBtn);
-        selectBtn.setOnClickListener(v -> getImageFromGallery());
+        Button takeBtn = findViewById(R.id.deeptakeBtn);
+        takeBtn.setOnClickListener(v -> getImageFromCamera());
 //        Button newButton = findViewById(R.id.newButton);
 
 
@@ -48,35 +57,48 @@ public class DeepGalleryActivity extends AppCompatActivity {
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
+
+        if(savedInstanceState != null) {
+            Uri uri = savedInstanceState.getParcelable(KEY_SELECTED_URI);
+            if (uri != null)
+                selectedImageUri = uri;
+        }
     }
 
-    private void getImageFromGallery(){
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT).setType("image/*");
-//        Intent intent = new Intent(Intent.ACTION_PICK,
-//                MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-        startActivityForResult(intent, GALLERY_IMAGE_REQUEST_CODE);
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putParcelable(KEY_SELECTED_URI, selectedImageUri);
+    }
+
+    private void getImageFromCamera(){
+        File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "picture.jpg");
+        selectedImageUri = FileProvider.getUriForFile(this, getPackageName(), file);
+
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, selectedImageUri);
+        startActivityForResult(intent, CAMERA_IMAGE_REQUEST_CODE);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         super.onActivityResult(requestCode, resultCode, data);
+
         if (resultCode == Activity.RESULT_OK &&
-                requestCode == GALLERY_IMAGE_REQUEST_CODE) {
-            if (data == null) {
-                return;
-            }
+                requestCode == CAMERA_IMAGE_REQUEST_CODE) {
 
-            Uri selectedImage = data.getData();
+            Uri selectedImageUri = data.getData();
+
             Bitmap bitmap = null;
-
             try {
                 if(Build.VERSION.SDK_INT >= 29) {
-                    ImageDecoder.Source src =
-                            ImageDecoder.createSource(getContentResolver(), selectedImage);
+                    ImageDecoder.Source src = ImageDecoder.createSource(
+                            getContentResolver(), selectedImageUri);
                     bitmap = ImageDecoder.decodeBitmap(src);
                 } else {
-                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
+                    bitmap = MediaStore.Images.Media.getBitmap(
+                            getContentResolver(), selectedImageUri);
                 }
             } catch (IOException ioe) {
                 Log.e(TAG, "Failed to read Image", ioe);
@@ -98,10 +120,10 @@ public class DeepGalleryActivity extends AppCompatActivity {
                     resultStr = "하의";
                 }
 
-                textView.setText(resultStr);
                 imageView.setImageBitmap(bitmap);
+                textView.setText(resultStr);
 
-                // 결과값이 출력되면 newButton을 보이게 설정
+//                // 결과값이 출력되면 newButton을 보이게 설정
 //                newButton.setVisibility(View.VISIBLE);
             }
 
