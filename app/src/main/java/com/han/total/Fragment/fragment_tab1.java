@@ -124,7 +124,11 @@ public class fragment_tab1 extends Fragment{
             Clear();
             ll_style.setVisibility(View.VISIBLE);
         }else if(v.getId()==R.id.ll_winter0){
-            Save(type,weather,style);
+            if(tv_title_type.getText().equals("계절")||tv_title_weather.getText().equals("종류")||tv_title_style.getText().equals("스타일")){
+                Toast.makeText(mContext, "타일을 모두 선택해주세요.", Toast.LENGTH_SHORT).show();
+            }else {
+                Save(type, weather, style);
+            }
         }
     }
 
@@ -191,17 +195,40 @@ public class fragment_tab1 extends Fragment{
                         String resultStr = String.format(Locale.ENGLISH,
                                 "class : %s, prob : %.2f%%",
                                 output.first, output.second * 100);
-                        if(isOutterGarment(output.first)){
-                            resultStr = "아우터";
-                        }else if(isUpperGarment(output.first)) {
-                            resultStr = "상의";
-                        }else if(isLowerGarment(output.first)) {
-                            resultStr = "하의";
+                        if(isOutterGarment(output.first)!="없음"){
+                            resultStr = isOutterGarment(output.first);
+                        }else if(isUpperGarment(output.first)!="없음") {
+                            resultStr = isUpperGarment(output.first);
+                        }else if(isLowerGarment(output.first)!="없음") {
+                            resultStr = isLowerGarment(output.first);
                         }else{
-                            resultStr = "아우터";
+                            tv_title_type.setText("아우터");
+                            type="아우터";
+                            tv_title_weather.setText("봄 / 가을");
+                            weather="봄";
                         }
-                        tv_title_type.setText(resultStr);
-                        type=resultStr;
+
+                        if(resultStr.contains("봄")){
+                            tv_title_type.setText(resultStr.replace("봄",""));
+                            type=resultStr.replace("봄","");
+                            tv_title_weather.setText("봄 / 가을");
+                            weather="봄";
+                        }else if(resultStr.contains("여름")){
+                            tv_title_type.setText(resultStr.replace("여름",""));
+                            type=resultStr.replace("여름","");
+                            tv_title_weather.setText("여름");
+                            weather="여름";
+                        }else if(resultStr.contains("겨울")){
+                            tv_title_type.setText(resultStr.replace("겨울",""));
+                            type=resultStr.replace("겨울","");
+                            tv_title_weather.setText("겨울");
+                            weather="겨울";
+                        }else{
+                            tv_title_type.setText("아우터");
+                            type="아우터";
+                            tv_title_weather.setText("봄 / 가을");
+                            weather="봄";
+                        }
                         //imageView.setImageBitmap(bitmap);
                     }
 
@@ -218,17 +245,36 @@ public class fragment_tab1 extends Fragment{
                             String resultStr = String.format(Locale.ENGLISH,
                                     "class : %s, prob : %.2f%%",
                                     output.first, output.second * 100);
-                            if(isOutterGarment(output.first)){
-                                resultStr = "아우터";
-                            }else if(isUpperGarment(output.first)) {
-                                resultStr = "상의";
-                            }else if(isLowerGarment(output.first)) {
-                                resultStr = "하의";
+                            if(isOutterGarment(output.first)!="없음"){
+                                resultStr = isOutterGarment(output.first);
+                            }else if(isUpperGarment(output.first)!="없음") {
+                                resultStr = isUpperGarment(output.first);
+                            }else if(isLowerGarment(output.first)!="없음") {
+                                resultStr = isLowerGarment(output.first);
                             }else{
-                                resultStr = "아우터";
+                                tv_title_type.setText("아우터");
+                                type="아우터";
+                                tv_title_weather.setText("봄 / 가을");
+                                weather="봄";
                             }
-                            tv_title_type.setText(resultStr);
-                            type=resultStr;
+                            if(resultStr.contains("봄")){
+                                tv_title_type.setText(resultStr.replace("봄",""));
+                                type=resultStr.replace("봄","");
+                                tv_title_weather.setText("봄 / 가을");
+                                weather="봄";
+                            }else if(resultStr.contains("여름")){
+                                tv_title_type.setText(resultStr.replace("여름",""));
+                                type=resultStr.replace("여름","");
+                                tv_title_weather.setText("여름");
+                                weather="여름";
+                            }else if(resultStr.contains("겨울")){
+                                tv_title_type.setText(resultStr.replace("겨울",""));
+                                type=resultStr.replace("겨울","");
+                                tv_title_weather.setText("겨울");
+                                weather="겨울";
+                            }
+                            //tv_title_type.setText(output.first);
+                            //type=resultStr;
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -245,51 +291,95 @@ public class fragment_tab1 extends Fragment{
         super.onDestroy();
     }
 
-    private boolean isLowerGarment(String className) {
-        String[] lowerGarments = {
-                "bikini", "jockstrap", "miniskirt", "pajama", "pantyhose",
-                "sarong", "skirt", "slacks", "socks", "stocking",
-                "swimming trunks", "trousers", "underpants", "vase", "jean","abaya"
+    private String isLowerGarment(String className) {
+        String[] springLowerGarments = {
+                "pajama", "slacks", "trousers", "underpants", "jean","abaya","suit"
         };
-
-        for (String garment : lowerGarments) {
+        String[] summerLowerGarments = {
+                "bikini", "jockstrap", "miniskirt", "pantyhose",
+                "sarong", "skirt", "stocking", "swimming trunks"
+        };
+        String[] winterLowerGarments = {
+                "tt"
+        };
+        for (String garment : springLowerGarments) {
             if (className.equalsIgnoreCase(garment)) {
-                return true;
+                return "봄하의";
             }
         }
-        return false;
+        for (String garment : summerLowerGarments) {
+            if (className.equalsIgnoreCase(garment)) {
+                return "여름하의";
+            }
+        }
+        for (String garment : winterLowerGarments) {
+            if (className.equalsIgnoreCase(garment)) {
+                return "겨울하의";
+            }
+        }
+        return "없음";
     }
 
-    private boolean isOutterGarment(String className){
-        String[] outterGarments = {
-                "sweatshirt","suit","cardigan","fur coat","academic gown","bathrobe"
+    private String isOutterGarment(String className){
+        String[] springOutterGarments = {
+                "cardigan","academic gown","bathrobe","sweatshirt"
         };
-        for (String garment : outterGarments) {
+        String[] summerOutterGarments = {
+                "tt"
+        };
+        String[] winterOutterGarments = {
+                "fur coat","trench coat","bulletproof vest"
+        };
+        for (String garment : springOutterGarments) {
             if (className.equalsIgnoreCase(garment)) {
-                return true;
+                return "봄아우터";
             }
         }
-        return false;
+        for (String garment : summerOutterGarments) {
+            if (className.equalsIgnoreCase(garment)) {
+                return "여름아우터";
+            }
+        }
+        for (String garment : winterOutterGarments) {
+            if (className.equalsIgnoreCase(garment)) {
+                return "겨울아우터";
+            }
+        }
+        return "없음";
     }
 
-    private boolean isUpperGarment(String className) {
-        String[] upperGarments = {
-                "apron", "wool","velvet",
-                "bikini", "binder", "bonnet", "bow tie", "brassiere",
-                "bulletproof vest", "cocktail dress", "cravat",
-                "diadem", "dinner jacket", "dressing gown", "gown","hoodie", "jockstrap",
-                "kimono", "lab coat", "life jacket", "loafer", "neck brace",
-                "nightshirt", "pajama", "sarong", "scarf", "shawl",
-                "silk dress", "ski mask", "slipper", "sombrero", "stole", "tiara", "tunic",
-                "turban", "tuxedo", "uniform", "veil", "vest", "jersey"
+    private String isUpperGarment(String className) {
+        String[] springUpperGarments = {
+                "velvet","cocktail dress", "dinner jacket", "dressing gown", "gown",
+                "kimono", "nightshirt", "pajama",
+                "silk dress", "stole", "tunic",
+                "tuxedo", "uniform", "veil", "vest"
+        };
+        String[] summerUpperGarments = {
+                "bikini", "binder", "brassiere", "dressing gown",
+                "life jacket", "pajama", "sarong", "shawl","jersey"
+        };
+        String[] winterUpperGarments = {
+                "wool", "bonnet", "dressing gown", "hoodie",
+                "ski mask"
         };
 
-        for (String garment : upperGarments) {
+        for (String garment : springUpperGarments) {
             if (className.equalsIgnoreCase(garment)) {
-                return true;
+                return "봄상의";
             }
         }
-        return false;
+        for (String garment : summerUpperGarments) {
+            if (className.equalsIgnoreCase(garment)) {
+                return "여름상의";
+            }
+        }
+        for (String garment : winterUpperGarments) {
+            if (className.equalsIgnoreCase(garment)) {
+                return "겨울상의";
+            }
+        }
+        return "없음";
     }
 
     void Save(String type, String weather, String style) {

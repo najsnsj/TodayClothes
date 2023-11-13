@@ -51,9 +51,6 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.fl_fragment0529)
     FrameLayout fl_fragment0529;
 
-    @BindView(R.id.fl_fragment0530)
-    FrameLayout fl_fragment0530;
-
     @BindView(R.id.fl_fragment3)
     FrameLayout fl_fragment3;
 //    @BindView(R.id.ll_bottom_fragment_total)
@@ -113,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // 클릭 리스너
-    @OnClick({R.id.fl_fragment0,R.id.fl_fragment1,R.id.fl_fragment2,R.id.fl_fragment3,R.id.fl_fragment0529,R.id.fl_fragment0530}) void BottomTabButton(View v){
+    @OnClick({R.id.fl_fragment0,R.id.fl_fragment1,R.id.fl_fragment2,R.id.fl_fragment3,R.id.fl_fragment0529}) void BottomTabButton(View v){
         int id = v.getId();
         Fragment fr =  new fragment_tab0(mContext);
         if(id==R.id.fl_fragment0){  //메인화면,. 날씨 있고, 그런 화면들...
@@ -139,10 +136,6 @@ public class MainActivity extends AppCompatActivity {
         }else if(id==R.id.fl_fragment0529){
             fposition = 4;
             Intent intent=new Intent(getApplicationContext(), donghyuktest.class);
-            startActivity(intent);
-        }else if(id==R.id.fl_fragment0530){
-            fposition = 5;
-            Intent intent=new Intent(getApplicationContext(), DeepMainActivity.class);
             startActivity(intent);
         }
         FragmentManager fm = getSupportFragmentManager();

@@ -144,6 +144,12 @@ TextView tv_sports;
                         CList3.add(data.getInstance(mContext).getRegister("하의" + season, i));
                     }
                 }
+                if(CList1.size()<1){
+                    holder.iv_img0.setImageResource(0);
+                }else {
+                    name1 = CList1.get(Random(CList1.size()) - 1);
+                    loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/", name1, holder, 1);
+                }
             } else if (style.equals("캐주얼")) {
                 for (int i = 1; i < 19; i++) {
                     if (data.getInstance(mContext).getStyle("상의" + season, i).equals("캐주얼")) {
@@ -170,13 +176,13 @@ TextView tv_sports;
                 }
             }
             if (CList1.size() < 1) {
-                holder.iv_img0.setImageResource(0);
+                holder.iv_img1.setImageResource(0);
             } else {
                 name1 = CList1.get(Random(CList1.size()) - 1);
                 loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/", name1, holder, 1);
             }
             if (CList2.size() < 1) {
-                holder.iv_img1.setImageResource(0);
+                holder.iv_img0.setImageResource(0);
             } else {
                 name2 = CList2.get(Random(CList2.size()) - 1);
                 loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/", name2, holder, 0);
