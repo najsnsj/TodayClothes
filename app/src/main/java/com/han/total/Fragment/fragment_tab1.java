@@ -409,6 +409,7 @@ public class fragment_tab1 extends Fragment{
             scanMediaFile(new File(path));
             Intent intent = new Intent(getActivity(), MainActivity.class);
             startActivity(intent);
+            getActivity().finish();
         }else {
             Toast.makeText(mContext, "갯수를 초과했습니다.", Toast.LENGTH_SHORT).show();
         }

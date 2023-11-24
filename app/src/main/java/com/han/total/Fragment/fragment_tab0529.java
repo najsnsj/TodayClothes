@@ -3,6 +3,7 @@ package com.han.total.Fragment;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.widget.CalendarView;
 import android.widget.TextView;
@@ -13,10 +14,13 @@ import com.han.total.R;
 
 public class fragment_tab0529 extends AppCompatActivity {
 
-
+    Context mContext;
     CalendarView calendar;
     TextView tv_date;
 
+    public fragment_tab0529(Context context) {
+        mContext = context;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -20,6 +20,7 @@ public class data {
     private static final String CLOTH_KEY = "CLOTH_KEY";
     private static final String CAL_CLOTH_KEY = "CAL_CLOTH_KEY";
     private static final String REGISTER_CLOTH_KEY = "REGISTER_CLOTH_KEY";
+    private static final String LOGIN_KEY = "LOGIN_KEY";
     private static SharedPreferences mSharedPreferences;
     private static SharedPreferences.Editor mEditor;
     private static Context mContext;
@@ -62,6 +63,8 @@ public class data {
     public void setRegister(String type,int flag,String cloth){mEditor.putString(REGISTER_CLOTH_KEY+type+flag, cloth); mEditor.commit();}
     public String getRegister(String type,int flag) {return mSharedPreferences.getString(REGISTER_CLOTH_KEY+type+flag,"");}
     public void DeleteRegister(String type,int flag) {mEditor.remove(REGISTER_CLOTH_KEY+type+flag); mEditor.apply();}
+    public void setLogin_info(String login_info) {mEditor.putString(LOGIN_KEY,login_info);mEditor.commit();}
+    public String getLogin_info() {return mSharedPreferences.getString(LOGIN_KEY,"NO");}
     public Map<String, String> getAllCALCValues(String type) {
         Map<String, String> calcValues = new HashMap<>();
         Map<String, ?> allEntries = mSharedPreferences.getAll();

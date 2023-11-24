@@ -9,24 +9,23 @@
     tools:context=".Activity.MainActivity">
 
 
-
     <FrameLayout
         android:id="@+id/fr_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent">
-    </FrameLayout>
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"></FrameLayout>
 
     <FrameLayout
         android:id="@+id/fl_fragment1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/fl_fragment0529"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
@@ -54,18 +53,14 @@
             android:layout_gravity="center"
             android:src="@drawable/list">
         </ImageView>
-
-
-
     </FrameLayout>
-
 
     <FrameLayout
         android:id="@+id/fl_fragment0529"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginTop="10dp"
-        app:layout_constraintLeft_toRightOf="@id/fl_fragment1"
+        app:layout_constraintLeft_toRightOf="@+id/fl_fragment4"
         app:layout_constraintTop_toTopOf="parent">
 
         <!-- 내용 추가 -->
@@ -74,6 +69,40 @@
             android:layout_height="50dp"
             android:layout_gravity="center"
             android:src="@drawable/baseline_calendar_month_24">
+        </ImageView>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_fragment5"
+        android:layout_width="80dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="10dp"
+        app:layout_constraintRight_toLeftOf="@+id/fl_fragment2"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/confirm_btn_round">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="내 정보"
+            android:textSize="17dp"
+            android:textStyle="bold">
+        </TextView>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_fragment4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/list_icon">
         </ImageView>
     </FrameLayout>
 

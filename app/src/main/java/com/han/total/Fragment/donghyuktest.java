@@ -26,6 +26,7 @@ import com.han.total.Activity.MainActivity;
 import com.han.total.Activity.SelectClothsActivity;
 import com.han.total.R;
 import com.han.total.data;
+import com.han.total.dialog.ListAddDialog;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -55,10 +56,12 @@ public class donghyuktest extends AppCompatActivity {
     public ImageView imageView2;
     public ImageView imageView3;
     public ImageView iv_Recommend;
+    public ImageView fashion_put;
 
     private static final int REQUEST_IMAGE_PICK = 1000;
     private static final int REQUEST_IMAGE_PICK_2 = 2000;
     private static final int REQUEST_IMAGE_PICK_3 = 3000;
+    private String login_info;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +74,7 @@ public class donghyuktest extends AppCompatActivity {
         imageView1 = findViewById(R.id.imageView1);
         imageView2 = findViewById(R.id.imageView2);
         imageView3 = findViewById(R.id.imageView3);
+        fashion_put = findViewById(R.id.fashion_put);
         date = getCurrentDate();
         diaryTextView.setText(date);
         recommend(date);
@@ -136,6 +140,18 @@ public class donghyuktest extends AppCompatActivity {
             }
         });
 
+        fashion_put.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ListAdd();
+            }
+        });
+
+    }
+    public void ListAdd(){
+        login_info = "you6@1111";
+        ListAddDialog listAddDialog = new ListAddDialog(this,date, login_info);
+        listAddDialog.show();
     }
 
     public String getCurrentDate() {
@@ -148,105 +164,6 @@ public class donghyuktest extends AppCompatActivity {
 
         return currentDate;
     }
-    /*public void checkDay(int cYear, int cMonth, int cDay)
-    {
-        readDay = "" + cYear + "-" + (cMonth + 1) + "" + "-" + cDay + ".txt";
-        FileInputStream fis;
-
-        try
-        {
-            fis = openFileInput(readDay);
-
-            byte[] fileData = new byte[fis.available()];
-            fis.read(fileData);
-            fis.close();
-
-            str = new String(fileData);
-
-            contextEditText.setVisibility(View.INVISIBLE);
-            textView2.setVisibility(View.VISIBLE);
-            textView2.setText(str);
-
-            save_Btn.setVisibility(View.INVISIBLE);
-            cha_Btn.setVisibility(View.VISIBLE);
-            del_Btn.setVisibility(View.VISIBLE);
-            gallery_Btn.setVisibility(View.INVISIBLE);
-            gallery_Btn2.setVisibility(View.INVISIBLE);
-            gallery_Btn3.setVisibility(View.INVISIBLE);
-            imageView1.setVisibility(View.VISIBLE);
-            imageView2.setVisibility(View.VISIBLE);
-            imageView3.setVisibility(View.VISIBLE);
-
-            Bitmap loadedImage = loadImage();
-            if (loadedImage != null) {
-                imageView.setImageBitmap(loadedImage);
-            }
-
-
-
-            cha_Btn.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View view)
-                {
-                    contextEditText.setVisibility(View.VISIBLE);
-                    textView2.setVisibility(View.INVISIBLE);
-                    contextEditText.setText(str);
-                    gallery_Btn.setVisibility(View.VISIBLE);
-                    gallery_Btn2.setVisibility(View.VISIBLE);
-                    gallery_Btn3.setVisibility(View.VISIBLE);
-                    imageView.setVisibility(View.INVISIBLE);
-                    imageView2.setVisibility(View.INVISIBLE);
-                    imageView3.setVisibility(View.INVISIBLE);
-                    save_Btn.setVisibility(View.VISIBLE);
-                    cha_Btn.setVisibility(View.INVISIBLE);
-                    del_Btn.setVisibility(View.INVISIBLE);
-                    textView2.setText(contextEditText.getText());
-                }
-
-            });
-            del_Btn.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View view)
-                {
-                    textView2.setVisibility(View.INVISIBLE);
-                    contextEditText.setText("");
-                    contextEditText.setVisibility(View.VISIBLE);
-                    save_Btn.setVisibility(View.VISIBLE);
-                    gallery_Btn.setVisibility(View.VISIBLE);
-                    gallery_Btn2.setVisibility(View.VISIBLE);
-                    gallery_Btn3.setVisibility(View.VISIBLE);
-                    imageView.setVisibility(View.INVISIBLE);
-                    imageView2.setVisibility(View.INVISIBLE);
-                    imageView3.setVisibility(View.INVISIBLE);
-                    cha_Btn.setVisibility(View.INVISIBLE);
-                    del_Btn.setVisibility(View.INVISIBLE);
-                    removeDiary(readDay);
-                }
-            });
-            if (textView2.getText() == null)
-            {
-                textView2.setVisibility(View.INVISIBLE);
-                diaryTextView.setVisibility(View.VISIBLE);
-                save_Btn.setVisibility(View.VISIBLE);
-                cha_Btn.setVisibility(View.INVISIBLE);
-                del_Btn.setVisibility(View.INVISIBLE);
-                imageView.setVisibility(View.INVISIBLE);
-                imageView2.setVisibility(View.INVISIBLE);
-                imageView3.setVisibility(View.INVISIBLE);
-                gallery_Btn.setVisibility(View.VISIBLE);
-                gallery_Btn2.setVisibility(View.VISIBLE);
-                gallery_Btn3.setVisibility(View.VISIBLE);
-                contextEditText.setVisibility(View.VISIBLE);
-            }
-
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-    }*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -570,23 +487,4 @@ public class donghyuktest extends AppCompatActivity {
             return randomNum;
         }
     }
-
-
-   /* @SuppressLint("WrongConstant")
-    public void saveDiary(String readDay)
-    {
-        FileOutputStream fos;
-        try
-        {
-            fos = openFileOutput(readDay, MODE_NO_LOCALIZED_COLLATORS);
-            String content = contextEditText.getText().toString();
-            fos.write((content).getBytes());
-            fos.close();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-
-    }*/
 }

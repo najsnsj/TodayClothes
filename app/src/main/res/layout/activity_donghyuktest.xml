@@ -63,6 +63,15 @@
                 android:layout_marginTop="10dp"
                 android:background="@drawable/confirm_btn_round" />
         </LinearLayout>
+
+        <ImageView
+            android:id="@+id/fashion_put"
+            android:layout_width="50dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="110dp"
+            android:background="@drawable/put_icon"/>
+
     </LinearLayout>
 
 

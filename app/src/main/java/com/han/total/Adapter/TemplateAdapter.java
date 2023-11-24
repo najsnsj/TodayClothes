@@ -18,6 +18,7 @@ import com.han.total.R;
 import com.han.total.Util.Global;
 import com.han.total.Util.Logg;
 import com.han.total.data;
+import com.han.total.dialog.ListAddDialog;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,8 +32,8 @@ import butterknife.OnClick;
 public class TemplateAdapter extends RecyclerView.Adapter<TemplateAdapter.ViewHolder> {
 @BindView(R.id.tv_sport2)
 TextView tv_sports;
-    @BindView(R.id.tv_title_style2)
-    TextView tv_title;
+@BindView(R.id.tv_title_style2)
+TextView tv_title;
     //
     public interface AdapterCallback {
         void DoSomeThing(int position);
@@ -242,6 +243,8 @@ TextView tv_sports;
             holder.iv_img2.setImageResource(data.getInstance(mContext).getCloth( "2", position));
         }
     }*/
+
+
 
     private void loadImageFromStorage(String path, String name,ViewHolder holder,int i)
     {

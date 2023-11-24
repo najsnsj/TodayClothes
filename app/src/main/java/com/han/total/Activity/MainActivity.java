@@ -25,6 +25,8 @@ import com.han.total.Fragment.fragment_tab1;
 import com.han.total.Fragment.fragment_tab2;
 import com.han.total.Fragment.fragment_tab3;
 
+import com.han.total.Fragment.fragment_tab_info;
+import com.han.total.Fragment.fragment_tab_list;
 import com.han.total.R;
 import com.han.total.Util.Global;
 import com.han.total.Util.Logg;
@@ -33,8 +35,7 @@ import com.han.total.Fragment.donghyuktest;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-//천규 0920 10:30 범수 0921 동혁 9.22
-//천규 0922 1711
+
 
 
 public class MainActivity extends AppCompatActivity {
@@ -53,10 +54,16 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.fl_fragment3)
     FrameLayout fl_fragment3;
+    @BindView(R.id.fl_fragment4)
+    FrameLayout fl_fragment4;
+    @BindView(R.id.fl_fragment5)
+    FrameLayout menu_info;
 //    @BindView(R.id.ll_bottom_fragment_total)
 //    LinearLayout ll_bottom_fragment_total;
     @BindView(R.id.fr_fragment)
     FrameLayout fr_fragment;
+
+    private String login_info;
     int fposition = 0 ;
 //    @BindView(R.id.template_recycler)
 //    RecyclerView template_recycler;
@@ -74,12 +81,8 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         InitFragement();
 
-        /*fl_fragment0529.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view){
-                Intent intent=new Intent(getApplicationContext(), donghyuktest.class);
-                startActivity(intent);
-            }
-        });//추가-최동혁*/
+        Intent intent = getIntent();
+        login_info = intent.getStringExtra("user");
 
     }
 
@@ -110,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // 클릭 리스너
-    @OnClick({R.id.fl_fragment0,R.id.fl_fragment1,R.id.fl_fragment2,R.id.fl_fragment3,R.id.fl_fragment0529}) void BottomTabButton(View v){
+    @OnClick({R.id.fl_fragment0,R.id.fl_fragment1,R.id.fl_fragment2,R.id.fl_fragment3,R.id.fl_fragment0529,R.id.fl_fragment4,R.id.fl_fragment5}) void BottomTabButton(View v){
         int id = v.getId();
         Fragment fr =  new fragment_tab0(mContext);
         if(id==R.id.fl_fragment0){  //메인화면,. 날씨 있고, 그런 화면들...
@@ -137,7 +140,14 @@ public class MainActivity extends AppCompatActivity {
             fposition = 4;
             Intent intent=new Intent(getApplicationContext(), donghyuktest.class);
             startActivity(intent);
+        }else if(id==R.id.fl_fragment4){
+            fposition = 5;
+            fr = new fragment_tab_list(mContext);
+        }else if(id==R.id.fl_fragment5){
+            fposition = 6;
+            fr = new fragment_tab_info(mContext, login_info);
         }
+        InitFragement();
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.replace(R.id.fr_fragment, fr);
@@ -173,6 +183,7 @@ public class MainActivity extends AppCompatActivity {
         if(fposition==0){
             finish();
         }else {
+            fposition=0;
             Fragment fr = new fragment_tab0(mContext);
             FragmentManager fm = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fm.beginTransaction();
