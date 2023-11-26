@@ -149,7 +149,7 @@ public class donghyuktest extends AppCompatActivity {
 
     }
     public void ListAdd(){
-        login_info = "you6@1111";
+        login_info = data.getInstance(mContext).getLogin_info()+"@1111";
         ListAddDialog listAddDialog = new ListAddDialog(this,date, login_info);
         listAddDialog.show();
     }
