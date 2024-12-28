@@ -18,7 +18,6 @@ import java.nio.channels.FileChannel;
 
 public class Classifier {
     private static final String MODEL_NAME = "mobilenet_imagenet_model.tflite";
-
     Context context;
     Interpreter interpreter = null;
     int modelInputWidth, modelInputHeight, modelInputChannel;
@@ -34,8 +33,6 @@ public class Classifier {
     }
 
     private ByteBuffer loadModelFile(String modelName) throws IOException {
-        //org.tensorflow.lite.support.common.FileUtil에 구현되어있음
-        //        org.tensorflow.lite.support.common.FileUtil.loadMappedFile(context, modelName);
         AssetManager am = context.getAssets();
         AssetFileDescriptor afd = am.openFd(modelName);
         FileInputStream fis = new FileInputStream(afd.getFileDescriptor());
@@ -91,9 +88,7 @@ public class Classifier {
 
     public Pair<Integer, Float> classify(Bitmap image) {
         ByteBuffer buffer = convertBitmapToGrayByteBuffer(resizeBitmap(image));
-
         float[][] result = new float[1][modelOutputClasses];
-
         interpreter.run(buffer, result);
 
         return argmax(result[0]);

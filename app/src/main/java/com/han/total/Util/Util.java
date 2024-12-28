@@ -8,9 +8,6 @@ import com.han.total.Interface.DelayCallback;
 
 
 public class Util {
-
-
-
     private static SharedPreferences mSharedPreferences;
     private static SharedPreferences.Editor mEditor;
     private static Context mContext;
@@ -21,13 +18,10 @@ public class Util {
         mContext = ctx;
         if (mInstance == null) {
             mInstance = new Util();
-            //mSharedPreferences = ctx.getSharedPreferences(PREF_NAME, Activity.MODE_PRIVATE);
-            //mEditor = mSharedPreferences.edit();
         }
         return mInstance;
     }
 
-    //Delay Function
     private DelayCallback mDelayCallback;
     public void DelayCallback(int DelayTime,DelayCallback callback){
         mDelayCallback = callback;

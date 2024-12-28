@@ -29,26 +29,21 @@ import static org.tensorflow.lite.support.image.ops.ResizeOp.ResizeMethod.NEARES
 public class ClassifierWithModel{
     private static final String MODEL_NAME = "mobilenet_imagenet_model.tflite";
     private static final String LABEL_FILE = "labels.txt";
-
     Context context;
     Model model;
     int modelInputWidth, modelInputHeight, modelInputChannel;
     TensorImage inputImage;
     TensorBuffer outputBuffer;
     private List<String> labels;
-
     private boolean isInitialized = false;
-
     public ClassifierWithModel(Context context) {
         this.context = context;
     }
 
     public void init() throws IOException {
         model = Model.createModel(context, MODEL_NAME);
-
         initModelShape();
         labels = FileUtil.loadLabels(context, LABEL_FILE);
-//        labels.remove(0);
 
         isInitialized = true;
     }

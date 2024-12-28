@@ -273,8 +273,6 @@ public class fragment_tab1 extends Fragment{
                                 tv_title_weather.setText("겨울");
                                 weather="겨울";
                             }
-                            //tv_title_type.setText(output.first);
-                            //type=resultStr;
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -385,14 +383,7 @@ public class fragment_tab1 extends Fragment{
     void Save(String type, String weather, String style) {
         String path="";
         String name="";
-        Logg.e(Global.USER_HTJ,"저장 타입: "+type);
-        Logg.e(Global.USER_HTJ,"저장 날씨: "+weather);
-        Logg.e(Global.USER_HTJ,"저장 스타일: "+style);
-        Logg.e(Global.USER_HTJ,"data.getInstance(mContext).setNumber(2,type+weather);: "+data.getInstance(mContext).getNumber(type+weather));
 
-        /*if(data.getInstance(mContext).getNumC(type+weather)==9) {
-            data.getInstance(mContext).setNumC(0, type + weather);
-        }*/
         if(data.getInstance(mContext).getNumber(type+weather)!=18) {
             data.getInstance(mContext).setNumber(data.getInstance(mContext).getNumber(type + weather) + 1, type + weather);
             data.getInstance(mContext).setNumC(data.getInstance(mContext).getNumC(type + weather) + 1, type + weather);
@@ -416,79 +407,6 @@ public class fragment_tab1 extends Fragment{
     }
 
 
-    /*void Save(String type, String weather, String style){
-        String path="";
-        String name="";
-        Logg.e(Global.USER_HTJ,"저장 타입: "+type);
-        Logg.e(Global.USER_HTJ,"저장 날씨: "+weather);
-        Logg.e(Global.USER_HTJ,"저장 스타일: "+style);
-        Logg.e(Global.USER_HTJ,"data.getInstance(mContext).setNumber(2,type+weather);: "+data.getInstance(mContext).getNumber(type+weather));
-
-
-        if(data.getInstance(mContext).getNumber(type+weather)==0){
-            data.getInstance(mContext).setNumber(1,type+weather);
-            data.getInstance(mContext).setStyle(style,type+weather,1);
-            name = type+weather+"1.jpg";
-            data.getInstance(mContext).setPicture(name,type+weather,1);
-            path = createPictureFilePath(name);
-            Logg.e(Global.USER_HTJ,"저장 name: "+1);
-            Logg.e(Global.USER_HTJ,"저장 name: "+name);
-            Logg.e(Global.USER_HTJ,"저장 path: "+path);
-
-        }else if(data.getInstance(mContext).getNumber(type+weather)==1){
-            data.getInstance(mContext).setNumber(2,type+weather);
-            data.getInstance(mContext).setStyle(style,type+weather,2);
-            name = type+weather+"2.jpg";
-            data.getInstance(mContext).setPicture(name,type+weather,2);
-            Logg.e(Global.USER_HTJ,"data.getInstance(mContext).setPicture(name,type+weather,2): "+data.getInstance(mContext).getPicture(type+weather,2));
-
-            path = createPictureFilePath(name);
-            Logg.e(Global.USER_HTJ,"저장 name: "+2);
-            Logg.e(Global.USER_HTJ,"저장 name: "+name);
-            Logg.e(Global.USER_HTJ,"저장 path: "+path);
-        }else{
-
-
-//            data.getInstance(mContext).setNumber(2,type+weather);
-//            name = type+weather+"2.jpg";
-//            data.getInstance(mContext).setPicture(name,type+weather,2);
-//            path = createPictureFilePath(name);
-//            Logg.e("저장 name: "+3);
-//            Logg.e("저장 name: "+name);
-//            Logg.e("저장 path: "+path);
-
-
-            data.getInstance(mContext).setNumber(data.getInstance(mContext).getNumber(type+weather)+1,type+weather);
-            if(data.getInstance(mContext).getNumber(type+weather)%2==0){
-                name = type+weather+"1.jpg";
-                data.getInstance(mContext).setStyle(style,type+weather,1);
-                data.getInstance(mContext).setPicture(name,type+weather,1);
-                path = createPictureFilePath(name);
-                Logg.e("저장 name: "+name);
-                Logg.e("저장 path: "+path);
-            }else{
-                name = type+weather+"2.jpg";
-                data.getInstance(mContext).setStyle(style,type+weather,2);
-                data.getInstance(mContext).setPicture(name,type+weather,2);
-                path = createPictureFilePath(name);
-                Logg.e("저장 name: "+name);
-                Logg.e("저장 path: "+path);
-            }
-
-            Logg.e("저장 name: "+3);
-            Logg.e("저장 name: "+name);
-            Logg.e("저장 path: "+path);
-        }
-        Logg.e("getPicture: "+ data.getInstance(mContext).getPicture(type+weather,2));
-
-
-
-
-        Logg.e(Global.USER_HTJ,"path:"+path);
-        saveBitmapAsFile(bitmap,path);
-        scanMediaFile(new File(path));
-    }*/
-
     // 카메라로 찍은 함수를 특정 위치로 저장하는 함수
     private void saveBitmapAsFile(Bitmap bitmap, String filepath) {
         File file = new File(filepath);
@@ -502,7 +420,6 @@ public class fragment_tab1 extends Fragment{
             os.close();
             Toast.makeText(mContext,"사진 저장",Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
-            Log.e("HAN","Exception: "+e);
             e.printStackTrace();
         }
     }

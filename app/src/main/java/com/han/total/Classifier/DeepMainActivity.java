@@ -10,7 +10,6 @@ import android.widget.Button;
 import com.han.total.R;
 
 public class DeepMainActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -14,7 +14,6 @@ import android.renderscript.Type;
 import java.nio.ByteBuffer;
 
 public class YuvToRgbConverter {
-
     public static void yuvToRgb(Context context, Image image, Bitmap output) {
         RenderScript rs = RenderScript.create(context);
         ScriptIntrinsicYuvToRGB scriptYuvToRgb =
@@ -60,7 +59,6 @@ public class YuvToRgbConverter {
                 case 1: {
                     outputStride = 2;
                     outputOffset = pixelCount + 1;
-
                     break;
                 }
                 case 2: {

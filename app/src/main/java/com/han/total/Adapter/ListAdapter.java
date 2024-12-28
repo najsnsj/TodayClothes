@@ -22,17 +22,13 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 public class ListAdapter extends BaseAdapter {
-
     private TextView list_title, list_id, list_date, list_recommend;
     private ImageView list_top, list_bottom, list_outer;
     private Button list_recommend_btn;
     private ArrayList<ListData> listData = new ArrayList<ListData>();
-
     private String postData = "";
     private String gd = "";
-
     private int recomended;
-
     private ListAdapterListener listAdapterListener;
 
     public void setListAdapterListener(ListAdapterListener listAdapterListener){

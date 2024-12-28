@@ -12,9 +12,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class Http extends AsyncTask<String, Void, String> {
-
     private configs conf;
-
 
     @Override
     protected String doInBackground(String... strings) {

@@ -28,7 +28,6 @@ import static org.tensorflow.lite.support.image.ops.ResizeOp.ResizeMethod.NEARES
 public class ClassifierWithSupport{
     private static final String MODEL_NAME = "mobilenet_imagenet_model.tflite";
     private static final String LABEL_FILE = "labels.txt";
-
     Context context;
     Interpreter interpreter;
     int modelInputWidth, modelInputHeight, modelInputChannel;

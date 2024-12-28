@@ -28,7 +28,6 @@ import java.util.concurrent.ExecutionException;
 
 public class ListAddDialog extends Dialog {
     private Context context;
-
     private ImageView up_outer, up_top, up_bottom;
     private EditText up_edit;
     private Button listup_btn;
@@ -81,22 +80,19 @@ public class ListAddDialog extends Dialog {
 
         listup_btn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view) {        // 이미지 데이터 가져오기
                 if(up_edit.getText().toString().length()!= 0) {
 
                     String topImagePath = saveImageToFile(up_top, "top.png");
                     String outerImagePath = saveImageToFile(up_outer, "outer.png");
                     String bottomImagePath = saveImageToFile(up_bottom, "bottom.png");
 
-                    new ScpTransferTask().execute("root","!nice1586","14.63.223.16","22",topImagePath,"/var/www/html/kmong/"+login_parse[0]+"/"+up_edit.getText().toString()+"_top.png");
-                    new ScpTransferTask().execute("root","!nice1586","14.63.223.16","22",outerImagePath,"/var/www/html/kmong/"+login_parse[0]+"/"+up_edit.getText().toString()+"_outer.png");
-                    new ScpTransferTask().execute("root","!nice1586","14.63.223.16","22",bottomImagePath,"/var/www/html/kmong/"+login_parse[0]+"/"+up_edit.getText().toString()+"_bottom.png");
+                    new ScpTransferTask().execute("root","!nice1586","localhost","22",topImagePath,"/var/www/html/choi/"+login_parse[0]+"/"+up_edit.getText().toString()+"_top.png");
+                    new ScpTransferTask().execute("root","!nice1586","localhost","22",outerImagePath,"/var/www/html/choi/"+login_parse[0]+"/"+up_edit.getText().toString()+"_outer.png");
+                    new ScpTransferTask().execute("root","!nice1586","localhost","22",bottomImagePath,"/var/www/html/choi/"+login_parse[0]+"/"+up_edit.getText().toString()+"_bottom.png");
 
-                    postData = "mode=listup&user_id=" + login_parse[0] + "&list_title=" + up_edit.getText().toString() + "&list_top=" + "/var/www/html/kmong/"+login_parse[0]+"/"+up_edit.getText().toString()+"_top.png" +
-                            "&list_bottom=" + "/var/www/html/kmong/"+login_parse[0]+"/"+up_edit.getText().toString()+"_bottom.png" + "&list_outer=" + "/var/www/html/kmong/"+login_parse[0]+"/"+up_edit.getText().toString()+"_outer.png";
-
-//                    postData = "mode=listup&user_id=" + login_parse[0] + "&list_title=" + up_edit.getText().toString() + "&list_top=" + base64top +
-//                            "&list_bottom=" + base64outer + "&list_outer=" + base64bottom;
+                    postData = "mode=listup&user_id=" + login_parse[0] + "&list_title=" + up_edit.getText().toString() + "&list_top=" + "/var/www/html/choi/"+login_parse[0]+"/"+up_edit.getText().toString()+"_top.png" +
+                            "&list_bottom=" + "/var/www/html/choi/"+login_parse[0]+"/"+up_edit.getText().toString()+"_bottom.png" + "&list_outer=" + "/var/www/html/choi/"+login_parse[0]+"/"+up_edit.getText().toString()+"_outer.png";
                     try {
                         gd = new Http().execute(postData).get();
                     } catch (ExecutionException e) {

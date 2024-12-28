@@ -30,30 +30,24 @@ import java.util.concurrent.ExecutionException;
 import butterknife.ButterKnife;
 
 public class fragment_tab_list extends Fragment {
-
     private Context mContext;
     private ListView list_view;
     private EditText search_edit;
     private LinearLayout search_btn;
-
     private ListAdapter listAdapter;
     private String postData = "";
     private String gd = "";
-
     public fragment_tab_list(Context context) {
         mContext = context;
     }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tab_list, container, false);
         ButterKnife.bind(this, view);
-
         listAdapter = new ListAdapter();
         list_view = (ListView) view.findViewById(R.id.list_view);
         list_view.setAdapter(listAdapter);
@@ -70,7 +64,6 @@ public class fragment_tab_list extends Fragment {
                 listAdapter.notifyDataSetChanged();
             }
         });
-
 
         list_view = (ListView) view.findViewById(R.id.list_view);
         list_view.setAdapter(listAdapter);

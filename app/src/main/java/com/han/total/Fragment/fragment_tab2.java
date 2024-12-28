@@ -34,12 +34,9 @@ public class fragment_tab2 extends Fragment {
         mContext = context;
         // Required empty public constructor
     }
-
     public fragment_tab2() {
         // Required empty public constructor
     }
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

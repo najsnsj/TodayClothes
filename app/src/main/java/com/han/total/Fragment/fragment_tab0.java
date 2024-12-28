@@ -36,8 +36,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.gun0912.tedpermission.PermissionListener;
-import com.gun0912.tedpermission.TedPermission;
+//import com.gun0912.tedpermission.PermissionListener;
+//import com.gun0912.tedpermission.TedPermission;
 import com.han.total.Activity.MainActivity;
 //import com.han.total.Adapter.Activity.MainActivity;
 import com.han.total.Adapter.TemplateAdapter;
@@ -65,10 +65,7 @@ import static android.app.Activity.RESULT_OK;
 import static android.content.Context.LOCATION_SERVICE;
 
 public class fragment_tab0 extends Fragment  implements TemplateAdapter.AdapterCallback{
-
-
     private Context mContext;
-
     @BindView(R.id.tv_time)
     TextView tv_time;
     @BindView(R.id.tv_address)
@@ -76,7 +73,6 @@ public class fragment_tab0 extends Fragment  implements TemplateAdapter.AdapterC
     @BindView(R.id.template_recycler)
     RecyclerView template_recycler;
     static boolean first=false;
-
     @BindView(R.id.tv_main_temperture)  TextView tv_main_temperture;
     @BindView(R.id.iv_main_weather) ImageView iv_main_weather;
     @BindView(R.id.tv_time0)  TextView tv_time0;
@@ -230,24 +226,12 @@ public class fragment_tab0 extends Fragment  implements TemplateAdapter.AdapterC
         DownloadFilesTask mDownloadFilesTask = new DownloadFilesTask(0);
         mDownloadFilesTask.execute();
         mHandler = new MainHandler();
-//        DownloadFilesTask mDownloadFilesTask1 = new DownloadFilesTask(1);
-//        mDownloadFilesTask1.execute();
-//
-//        DownloadFilesTask mDownloadFilesTask2 = new DownloadFilesTask(2);
-//        mDownloadFilesTask2.execute();
-//
-//        DownloadFilesTask mDownloadFilesTask3 = new DownloadFilesTask(3);
-//        mDownloadFilesTask3.execute();
-//
-//        DownloadFilesTask mDownloadFilesTask4 = new DownloadFilesTask(4);
-//        mDownloadFilesTask3.execute();
 
         return view;
-        //return inflater.inflate(R.layout.fragment_tab0, container, false);
     }
 
     //카메라 권한 받는 함수
-    void PermissonCamera(){
+    /*void PermissonCamera(){
         //권한 체크
         TedPermission.with(mContext)
                 .setPermissionListener(permissionListener)
@@ -255,7 +239,7 @@ public class fragment_tab0 extends Fragment  implements TemplateAdapter.AdapterC
                 .setDeniedMessage("카메라 권한을 거부하셨습니다.")
                 .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .check();
-    }
+    }*/
 
 
     //RecyclerView
@@ -308,7 +292,7 @@ public class fragment_tab0 extends Fragment  implements TemplateAdapter.AdapterC
     }
 
     // 퍼미션 결과
-    PermissionListener permissionListener = new PermissionListener() {
+   /* PermissionListener permissionListener = new PermissionListener() {
         @Override
         public void onPermissionGranted() {
             //Toast.makeText(mContext, "권한이 허용됨", Toast.LENGTH_SHORT).show();
@@ -318,7 +302,7 @@ public class fragment_tab0 extends Fragment  implements TemplateAdapter.AdapterC
         public void onPermissionDenied(ArrayList<String> deniedPermissions) {
             //Toast.makeText(mContext, "권한이 거부됨", Toast.LENGTH_SHORT).show();
         }
-    };
+    };*/
 
 
     // 카메라 띄우는 함수
@@ -414,33 +398,15 @@ public class fragment_tab0 extends Fragment  implements TemplateAdapter.AdapterC
         int hasCoarseLocationPermission = ContextCompat.checkSelfPermission((Activity) mContext,
                 Manifest.permission.ACCESS_COARSE_LOCATION);
 
-
         if (hasFineLocationPermission == PackageManager.PERMISSION_GRANTED &&
                 hasCoarseLocationPermission == PackageManager.PERMISSION_GRANTED) {
 
-            // 2. 이미 퍼미션을 가지고 있다면
-            // ( 안드로이드 6.0 이하 버전은 런타임 퍼미션이 필요없기 때문에 이미 허용된 걸로 인식합니다.)
-
-
-            // 3.  위치 값을 가져올 수 있음
-
-
-
-        } else {  //2. 퍼미션 요청을 허용한 적이 없다면 퍼미션 요청이 필요합니다. 2가지 경우(3-1, 4-1)가 있습니다.
-
-            // 3-1. 사용자가 퍼미션 거부를 한 적이 있는 경우에는
+        } else {
             if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) mContext, REQUIRED_PERMISSIONS[0])) {
-
-                // 3-2. 요청을 진행하기 전에 사용자가에게 퍼미션이 필요한 이유를 설명해줄 필요가 있습니다.
                 Toast.makeText(mContext, "이 앱을 실행하려면 위치 접근 권한이 필요합니다.", Toast.LENGTH_LONG).show();
-                // 3-3. 사용자게에 퍼미션 요청을 합니다. 요청 결과는 onRequestPermissionResult에서 수신됩니다.
                 ActivityCompat.requestPermissions((Activity) mContext, REQUIRED_PERMISSIONS,
                         PERMISSIONS_REQUEST_CODE);
-
-
             } else {
-                // 4-1. 사용자가 퍼미션 거부를 한 적이 없는 경우에는 퍼미션 요청을 바로 합니다.
-                // 요청 결과는 onRequestPermissionResult에서 수신됩니다.
                 ActivityCompat.requestPermissions((Activity) mContext, REQUIRED_PERMISSIONS,
                         PERMISSIONS_REQUEST_CODE);
             }
@@ -452,14 +418,10 @@ public class fragment_tab0 extends Fragment  implements TemplateAdapter.AdapterC
 
     // 위도 경도를 글씨로 나타냄
     public String getCurrentAddress( double latitude, double longitude) {
-
         //지오코더... GPS를 주소로 변환
         Geocoder geocoder = new Geocoder(mContext, Locale.getDefault());
-
         List<Address> addresses;
-
         try {
-
             addresses = geocoder.getFromLocation(
                     latitude,
                     longitude,
@@ -473,8 +435,6 @@ public class fragment_tab0 extends Fragment  implements TemplateAdapter.AdapterC
             return "잘못된 GPS 좌표";
 
         }
-
-
 
         if (addresses == null || addresses.size() == 0) {
             Toast.makeText(mContext, "주소 미발견", Toast.LENGTH_LONG).show();
@@ -540,7 +500,6 @@ public class fragment_tab0 extends Fragment  implements TemplateAdapter.AdapterC
                     if (bitmap != null) {
                         //iv_0.setImageBitmap(bitmap);
                     }
-
                 }
                 break;
         }
@@ -552,8 +511,6 @@ public class fragment_tab0 extends Fragment  implements TemplateAdapter.AdapterC
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
                 || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
-
-
 
     // 인증키 :
     // wiKBDAlOK9alXdz6utoeOBEGiQb44KoCl5cwW9pOq4D6PuwmMwKWGyQwyGDFUxTTzTnC8fc8LbplwrXKH5rX9w%3D%3D
@@ -629,36 +586,6 @@ public class fragment_tab0 extends Fragment  implements TemplateAdapter.AdapterC
             }
         }
 
-        //date = Today();
-        //time = "0500";
-
-
-//         if(stage==1){
-//             Logg.e(Global.USER_HTJ,"오후 "+(Integer.parseInt(time)-12)+":00");
-//            if(Integer.parseInt(time)>12){
-//                tv_time3.setText("오후 "+(Integer.parseInt(time)-12)+":00");
-//            }else{
-//                tv_time3.setText("오전 "+(Integer.parseInt(time))+":00");
-//            }
-//        }else if(stage==2){
-//            if(Integer.parseInt(time)>12){
-//                tv_time2.setText("오후 "+(Integer.parseInt(time)-12)+":00");
-//            }else{
-//                tv_time2.setText("오전 "+(Integer.parseInt(time))+":00");
-//            }
-//        }else if(stage==3){
-//            if(Integer.parseInt(time)>12){
-//                tv_time1.setText("오후 "+(Integer.parseInt(time)-12)+":00");
-//            }else{
-//                tv_time1.setText("오전 "+(Integer.parseInt(time))+":00");
-//            }
-//        }else if(stage==4){
-//            if(Integer.parseInt(time)>12){
-//                tv_time0.setText("오후 "+(Integer.parseInt(time)-12)+":00");
-//            }else{
-//                tv_time0.setText("오전 "+(Integer.parseInt(time))+":00");
-//            }
-//        }
         if(time.length()==1)
             time = "&base_time="+"0"+time+"00";
         else
@@ -671,8 +598,7 @@ public class fragment_tab0 extends Fragment  implements TemplateAdapter.AdapterC
         Logg.e(Global.USER_HTJ,"date: "+date);
         Logg.e(Global.USER_HTJ,"time: "+time);
         Logg.e(Global.USER_HTJ,"total_url: "+total_url);
-        //url = url+servicekey;
-        //StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1360000/VilageFcstInfoService/getVilageFcst?serviceKey=wiKBDAlOK9alXdz6utoeOBEGiQb44KoCl5cwW9pOq4D6PuwmMwKWGyQwyGDFUxTTzTnC8fc8LbplwrXKH5rX9w%3D%3D&pageNo=1&numOfRows=10&dataType=JSON&base_date=20210419&base_time=0500&nx=1&ny=1"); /*URL*/
+
         StringBuilder urlBuilder = new StringBuilder(total_url); /*URL*/
 
         try {
@@ -739,8 +665,6 @@ public class fragment_tab0 extends Fragment  implements TemplateAdapter.AdapterC
                             int temp1 = Integer.parseInt(arr[0])+Integer.parseInt(arr[1])+Integer.parseInt(arr[2])+Integer.parseInt(arr[3]);
                             temp = (int)(temp1/4);
                         }
-                        //int temp1 = 40;
-                        //temp = (int)(temp1/4);
                         if (true) {
                             tv_main_temperture.setText(temp + "º");
                             tv_temperature0.setText(arr[0] + "º");
@@ -750,8 +674,6 @@ public class fragment_tab0 extends Fragment  implements TemplateAdapter.AdapterC
                             first=true;
                         }
                         InitRecylerView("스타일");
-//                        DownloadFilesTask mDownloadFilesTask = new DownloadFilesTask(Check);
-//                        mDownloadFilesTask.execute();
                     }
                 }, 200); // 1sec ->  200
             }
@@ -810,22 +732,13 @@ public class fragment_tab0 extends Fragment  implements TemplateAdapter.AdapterC
 
         try {
             jsonResult = new JSONObject(allmsg);
-
             Logg.e(Global.USER_HTJ,"jsonResult: "+jsonResult+"");
-            //JSONArray data = new JSONArray(jsonResult.getString("row"));
-
-            //Log.e("HAN: "," jsonResult.getString(\"Corona19Status\"): "+ jsonResult.getString("Corona19Status")+"");
-
-            //jsonResult = new JSONObject(jsonResult.getString("Corona19Status"));
-            //Log.e("HAN: "," jsonResult.getString(rona19Status): "+ jsonResult.getString("row")+"");
 
             jsonResult = new JSONObject(jsonResult.getString("response"));
             jsonResult = new JSONObject(jsonResult.getString("body"));
             jsonResult = new JSONObject(jsonResult.getString("items"));
 
             JSONArray data = new JSONArray(jsonResult.getString("item"));
-//            Log.e("HAN: ","data.length(): "+ data.length());
-//            //JSONArray list= jsonResult.getJSONArray("Corona19Status");
             int skyindex=0;
             int ptyindex=0;
             int p1hindex=0;
@@ -880,10 +793,7 @@ public class fragment_tab0 extends Fragment  implements TemplateAdapter.AdapterC
                 }
 
                 if(jsonPopupObject.get("category").equals("PTY")){  //0아니면 비이다.
-                    //Logg.e(Global.USER_HTJ,"RAIN"+jsonPopupObject.get("fcstValue"));
-                    //Logg.e(Global.USER_HTJ,"ptyindex"+ ptyindex);
                     if(ptyindex==0){
-                        //Logg.e(Global.USER_HTJ,"jsonPopupObject.get(\"fcstValue\"):"+jsonPopupObject.get("fcstValue"));
                         if(!jsonPopupObject.get("fcstValue").equals("0")){
                             iv_main_weather.setImageResource(R.drawable.rain);
                         }
@@ -908,22 +818,15 @@ public class fragment_tab0 extends Fragment  implements TemplateAdapter.AdapterC
                 }
 
                 if(jsonPopupObject.get("category").equals("T1H")){  //기온
-                    //Logg.e(Global.USER_HTJ," jsonPopupObject.get(\"fcstValue\"); "+ jsonPopupObject.get("fcstValue"));
-                    Logg.e(Global.USER_HTJ,"기온"+ jsonPopupObject.get("fcstValue"));
-                    Logg.e(Global.USER_HTJ,"기온 p1hindex"+ p1hindex);
                     average+=Integer.parseInt(jsonPopupObject.get("fcstValue").toString());
                     if(p1hindex==0){
                         arr[0] = jsonPopupObject.get("fcstValue").toString();
-                        //tv_temperature3.setText(jsonPopupObject.get("fcstValue")+"º");
                     }else if(p1hindex==1){
                         arr[1] = jsonPopupObject.get("fcstValue").toString();
-                        //tv_temperature2.setText(jsonPopupObject.get("fcstValue")+"º");
                     }else if(p1hindex==2){
                         arr[2] = jsonPopupObject.get("fcstValue").toString();
-                        //tv_temperature1.setText(jsonPopupObject.get("fcstValue")+"º");
                     }else if(p1hindex==3){
                         arr[3] = jsonPopupObject.get("fcstValue").toString();
-                        //tv_temperature0.setText(jsonPopupObject.get("fcstValue")+"º");
                     }
                     p1hindex++;
                 }

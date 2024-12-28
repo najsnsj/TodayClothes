@@ -9,7 +9,6 @@ import java.util.Map;
 
 
 public class data {
-
     private final static String PREF_NAME = "pref_sharedpreferences_data";
     private static final String NEW_NOTIFY_YN_KEY = "new_notify_yn_key";
     private static final String NEW_NOTE_KEY = "new_note_key";

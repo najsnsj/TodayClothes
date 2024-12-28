@@ -24,7 +24,6 @@ import java.util.Locale;
 public class DeepGalleryActivity extends AppCompatActivity {
     public static final String TAG = "[IC]GalleryActivity";
     public static final int GALLERY_IMAGE_REQUEST_CODE = 1;
-
     private ClassifierWithModel cls;
     private ImageView imageView;
     private TextView textView;
@@ -38,8 +37,6 @@ public class DeepGalleryActivity extends AppCompatActivity {
 
         Button selectBtn = findViewById(R.id.deepselectBtn);
         selectBtn.setOnClickListener(v -> getImageFromGallery());
-//        Button newButton = findViewById(R.id.newButton);
-
 
         imageView = findViewById(R.id.deepimageView);
         textView = findViewById(R.id.deeptextView);
@@ -54,8 +51,6 @@ public class DeepGalleryActivity extends AppCompatActivity {
 
     private void getImageFromGallery(){
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT).setType("image/*");
-//        Intent intent = new Intent(Intent.ACTION_PICK,
-//                MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         startActivityForResult(intent, GALLERY_IMAGE_REQUEST_CODE);
     }
 

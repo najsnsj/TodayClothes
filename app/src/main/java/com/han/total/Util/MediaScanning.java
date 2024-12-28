@@ -7,13 +7,11 @@ import android.net.Uri;
 import java.io.File;
 
 public class MediaScanning implements MediaScannerConnection.MediaScannerConnectionClient {
-
     private MediaScannerConnection mConnection;
     private File mTargetFile;
 
     public MediaScanning(Context mContext, File targetFile) {
         this.mTargetFile = targetFile;
-
         mConnection = new MediaScannerConnection(mContext, this);
         mConnection.connect();
     }

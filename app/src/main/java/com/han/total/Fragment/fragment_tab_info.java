@@ -27,7 +27,6 @@ public class fragment_tab_info extends Fragment {
         this.login_info = login_info;
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,16 +36,11 @@ public class fragment_tab_info extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tab_info, container, false);
-        //ButterKnife.bind(this, view);
-        //info_id_txt = view.findViewById(R.id.info_id_txt) ;
         info_name_txt = view.findViewById(R.id.info_name_txt) ;
         info_date_txt = view.findViewById(R.id.info_date_txt) ;
         info_nic_txt = view.findViewById(R.id.info_nic_txt) ;
         info_recommend = view.findViewById(R.id.info_recommend);
-
         String[] parse_login_info = login_info.split("@");
-
-       // info_id_txt.setText(parse_login_info[0]);
         info_name_txt.setText(parse_login_info[2]);
         info_nic_txt.setText(parse_login_info[3]);
         info_date_txt.setText(parse_login_info[4]);

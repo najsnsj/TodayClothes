@@ -39,7 +39,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class SelectClothsActivity extends AppCompatActivity {
-
     Context mContext;
     @BindView(R.id.tv_weather)
     TextView tv_weather;
@@ -51,13 +50,6 @@ public class SelectClothsActivity extends AppCompatActivity {
     RadioButton rb_1;
     @BindView(R.id.rb_2)
     RadioButton rb_2;
-    String weather = null;
-    String date = null;
-    int n = 0;
-    int Dnum = 0;
-    int page = 1;
-    int condition = 0;
-    String type = null;
     @BindView(R.id.iv_1) ImageView iv_1;
     @BindView(R.id.iv_2) ImageView iv_2;
     @BindView(R.id.iv_3) ImageView iv_3;
@@ -67,6 +59,14 @@ public class SelectClothsActivity extends AppCompatActivity {
     @BindView(R.id.iv_7) ImageView iv_7;
     @BindView(R.id.iv_8) ImageView iv_8;
     @BindView(R.id.iv_9) ImageView iv_9;
+    String weather = null;
+    String date = null;
+    int n = 0;
+    int Dnum = 0;
+    int page = 1;
+    int condition = 0;
+    String type = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,7 +98,6 @@ public class SelectClothsActivity extends AppCompatActivity {
             tv_weather.setClickable(false);
             Init(type, weather);
         }
-
     }
 
     @OnClick({R.id.tv_weather}) void ClickW(){
@@ -154,8 +153,6 @@ public class SelectClothsActivity extends AppCompatActivity {
             }else {
                 Dnum = n;
             }
-            //String name = data.getInstance(mContext).getRegister("아우터봄", 5);
-            //loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/", name, n);
         }
         if(condition==0) {
             if(page==2){
@@ -480,24 +477,6 @@ public class SelectClothsActivity extends AppCompatActivity {
         Logg.e(Global.USER_HTJ,"타입: "+type);
         Logg.e(Global.USER_HTJ,"날씨: "+weather);
         Logg.e(Global.USER_HTJ,"개수: "+data.getInstance(mContext).getNumber(type+weather));
-
-       /* if(data.getInstance(mContext).getNumber(type+weather)==0){
-            iv_8.setVisibility(View.GONE);
-            iv_9.setVisibility(View.GONE);
-        }else if(data.getInstance(mContext).getNumber(type+weather)==1){
-            String name = data.getInstance(mContext).getPicture(type+weather,1);
-            loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/",name,true);
-            iv_9.setVisibility(View.GONE);
-        }else{
-            String name = data.getInstance(mContext).getPicture(type+weather,1);
-            Logg.e(Global.USER_HTJ,"아우터 겨울1: "+name);
-            String name2 = data.getInstance(mContext).getStyle(type+weather,1);
-            tv_weather.setText(name2);
-            loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/",name,true);
-            name = data.getInstance(mContext).getPicture(type+weather,2);
-            Logg.e(Global.USER_HTJ,"아우터 겨울2: "+name);
-            loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/",name,false);
-        }*/
     }
 
     public String getCurrentDate() {
@@ -708,23 +687,4 @@ public class SelectClothsActivity extends AppCompatActivity {
         }
         return d1;
     }
-    /*private void loadImageFromStorage(String path, String name,boolean flag)
-    {
-        try {
-            File f;
-            f = new File(path, name);
-            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
-            if (flag){
-                iv_8.setImageBitmap(b);
-            }else{
-                iv_9.setImageBitmap(b);
-            }
-
-        }
-        catch (FileNotFoundException e)
-        {
-            Log.e("HAN","exception: "+e);
-            e.printStackTrace();
-        }
-    }*/
 }

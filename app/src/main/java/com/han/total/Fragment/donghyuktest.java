@@ -42,11 +42,9 @@ import java.util.Random;
 import butterknife.OnClick;
 
 public class donghyuktest extends AppCompatActivity {
-
     private Context mContext;
     public String readDay = null;
     public String date = null;
-
     public CalendarView calendarView;
     public Button cha_Btn, del_Btn, save_Btn;
     public TextView diaryTextView, textView2, textView3;
@@ -81,10 +79,6 @@ public class donghyuktest extends AppCompatActivity {
         loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/", data.getInstance(mContext).getCALC(date, "아우터"), imageView1);
         loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/", data.getInstance(mContext).getCALC(date, "상의"), imageView2);
         loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/", data.getInstance(mContext).getCALC(date, "하의"), imageView3);
-        /*Intent intent = getIntent();
-        String image =  intent.getStringExtra("image");
-        int num = intent.getIntExtra("num");*/
-        // contextEditText.setText(image);
 
         imageView1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,10 +127,7 @@ public class donghyuktest extends AppCompatActivity {
                 loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/",data.getInstance(mContext).getCALC(date,"아우터"),imageView1);
                 loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/",data.getInstance(mContext).getCALC(date,"상의"),imageView2);
                 loadImageFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/",data.getInstance(mContext).getCALC(date,"하의"),imageView3);
-                //imageView3.setVisibility(View.INVISIBLE);
-                //contextEditText.setVisibility(View.VISIBLE);
                 diaryTextView.setText(date);
-                //checkDay(year, month, dayOfMonth);
             }
         });
 

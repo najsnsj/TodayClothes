@@ -11,7 +11,6 @@ public class ScpUtil {
         Session session = null;
         Channel channel = null;
         ChannelSftp channelSftp = null;
-
         try {
             // 세션 객체 생성
             session = jsch.getSession(username, host, port);

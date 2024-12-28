@@ -7,14 +7,11 @@ import android.content.SharedPreferences;
 
 // 로컬데이터 저장하는 함수
 class SharedPreferencesData {
-
     private final static String PREF_NAME = "pref_sharedpreferences_data";
     private static final String NEW_NOTIFY_YN_KEY = "new_notify_yn_key";
-
     private static SharedPreferences mSharedPreferences;
     private static SharedPreferences.Editor mEditor;
     private static Context mContext;
-
     private static SharedPreferencesData mInstance;
     public synchronized static SharedPreferencesData getInstance(Context ctx) {
         mContext = ctx;
@@ -25,7 +22,6 @@ class SharedPreferencesData {
         }
         return mInstance;
     }
-
 
     /*------ this is for new notify  --------*/
     public void setNewNotify(String flag){

@@ -29,7 +29,6 @@ public class DeepCameraActivity extends AppCompatActivity {
     public static final String TAG = "[IC]CameraActivity";
     public static final int CAMERA_IMAGE_REQUEST_CODE = 1;
     private static final String KEY_SELECTED_URI = "KEY_SELECTED_URI";
-
     private ClassifierWithModel cls;
     private ImageView imageView;
     private TextView textView;

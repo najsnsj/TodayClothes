@@ -22,10 +22,7 @@ import com.han.total.R;
 import java.util.ArrayList;
 
 public class fragment_tab3 extends Fragment  implements TemplateAdapter.AdapterCallback{
-
-
     private Context mContext;
-
     @BindView(R.id.template_recycler)
     RecyclerView template_recycler;
 
@@ -38,7 +35,6 @@ public class fragment_tab3 extends Fragment  implements TemplateAdapter.AdapterC
         // Required empty public constructor
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,31 +44,24 @@ public class fragment_tab3 extends Fragment  implements TemplateAdapter.AdapterC
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-
         View view = inflater.inflate(R.layout.fragment_tab3, container, false);
         ButterKnife.bind(this, view);
         InitRecylerView();
         return view;
-        //return inflater.inflate(R.layout.fragment_tab0, container, false);
     }
 
 
     //RecyclerView
     @Override
     public void DoSomeThing(int posionion){
-        //((MainActivity)getActivity()).FragmentSwitch(3,mContext);
-        //Toast.makeText(mContext,"posion: "+posionion,Toast.LENGTH_SHORT).show();
+
     }
 
 
     //RecyclerView
     // 리스트뷰 초기화
     public void InitRecylerView(){
-
         template_recycler.setVisibility(View.VISIBLE);
-        //fr_fragment.setVisibility(View.GONE);
-
         ArrayList<String> list = new ArrayList<>();
         for (int i=0; i<3; i++) {
             list.add(Integer.toString(-100)) ;

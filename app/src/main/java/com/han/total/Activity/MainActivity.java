@@ -39,38 +39,27 @@ import butterknife.OnClick;
 
 
 public class MainActivity extends AppCompatActivity {
-
     Context mContext;
-
     @BindView(R.id.fl_fragment0)
     FrameLayout fl_fragment0;
     @BindView(R.id.fl_fragment1)
     FrameLayout fl_fragment1;
     @BindView(R.id.fl_fragment2)
     FrameLayout fl_fragment2;
-
     @BindView(R.id.fl_fragment0529)
     FrameLayout fl_fragment0529;
-
     @BindView(R.id.fl_fragment3)
     FrameLayout fl_fragment3;
     @BindView(R.id.fl_fragment4)
     FrameLayout fl_fragment4;
     @BindView(R.id.fl_fragment5)
     FrameLayout menu_info;
-//    @BindView(R.id.ll_bottom_fragment_total)
-//    LinearLayout ll_bottom_fragment_total;
     @BindView(R.id.fr_fragment)
     FrameLayout fr_fragment;
 
     private String login_info;
     int fposition = 0 ;
-//    @BindView(R.id.template_recycler)
-//    RecyclerView template_recycler;
-    //
     TemplateAdapter.AdapterCallback mAdapterCallback;
-
-
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -90,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
     // 프레그먼트 초기값
     public void InitFragement(){
         if(Global.FRAGMENT_NUMBERS==0){
-            //ll_bottom_fragment_total.setVisibility(View.GONE);
             fr_fragment.setVisibility(View.GONE);
         }else if(Global.FRAGMENT_NUMBERS==1){
             fl_fragment1.setVisibility(View.GONE);
@@ -173,7 +161,6 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.fr_fragment, fr);
         fragmentTransaction.commit();
     }
-
 
     // 소프트웨어 백버튼
     // 메인화면일경우 앱을 종료하고, 그게 아닌 경우 이전 화면으로 이동하기

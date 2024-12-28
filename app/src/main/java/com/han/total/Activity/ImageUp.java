@@ -15,9 +15,9 @@ public class ImageUp {
 
         try {
             // SSH 연결 설정
-            String sshHost = "http://14.63.223.16";
-            String sshUser = "kmong";
-            String sshPassword = "kmong";
+            String sshHost = "http://localhost";
+            String sshUser = "choi";
+            String sshPassword = "choi";
             int sshPort = 22;
 
             session = jsch.getSession(sshUser, sshHost, sshPort);

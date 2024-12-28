@@ -13,11 +13,9 @@ import com.han.total.R;
 
 
 public class fragment_tab0529 extends AppCompatActivity {
-
     Context mContext;
     CalendarView calendar;
     TextView tv_date;
-
     public fragment_tab0529(Context context) {
         mContext = context;
     }
@@ -25,12 +23,8 @@ public class fragment_tab0529 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_tab0529);
-
-
-
         calendar = findViewById(R.id.calendar_dh);
         tv_date = findViewById(R.id.tv_date_dh);
-
         calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView calendarView, int year, int month, int day) {

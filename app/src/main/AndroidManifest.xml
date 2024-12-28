@@ -36,15 +36,11 @@
         <activity
             android:name=".Fragment.donghyuktest"
             android:exported="true" />
-        <activity
-            android:name=".Fragment.fragment_tab0529"
-            android:exported="false" />
         <activity android:name=".Activity.SelectClothsActivity" />
         <activity android:name=".Activity.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -53,12 +49,12 @@
             android:windowSoftInputMode="adjustPan"
             android:exported="true">
         </activity>
-        <activity
+       <!-- <activity
             android:name="com.nhn.android.naverlogin.ui.OAuthCustomTabActivity"
-            android:exported="false">
+            android:exported="false"> -->
 
             <!-- 이 activity에 필요한 intent-filter가 있다면 여기에 추가 -->
-        </activity>
+        <!--</activity>-->
         <service
             android:name=".Service.GpsTracker"
             android:enabled="true"
